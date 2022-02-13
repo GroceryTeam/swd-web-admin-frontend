@@ -34,8 +34,20 @@ const Dashboard = () => {
    <div className="flex w-screen max-w-screen-xl mx-auto bg-gray-100">
       <div className="w-1/5 max-w-360-px border-2 py-12 h-screen bg-teal-100">
         <div className="flex flex-col px-4">
-          <div className="flex-1 text-xl">
-            Dashboard
+          <div className="flex-1 text-lg mb-3 p-3 rounded-md">
+            Trang chủ
+          </div>
+          <div className="flex-1 text-lg mb-3 bg-white p-3 rounded-md">
+            Người dùng
+          </div>
+          <div className="flex-1 text-lg mb-3 p-3 rounded-md">
+            Thương hiệu
+          </div>
+          <div className="flex-1 text-lg mb-3 p-3 rounded-md">
+            Cửa hàng
+          </div>
+          <div className="flex-1 text-lg mb-3 p-3 rounded-md">
+            Yêu cầu mở cửa hàng
           </div>
         </div>
       </div>
@@ -43,12 +55,12 @@ const Dashboard = () => {
       <div className="w-4/5 py-12 h-screen">
         <div className="flex flex-col px-4">
           <div className="flex-1 mb-6">
-            <h2 className="text-3xl">Dashboard</h2>
+            <h2 className="text-3xl uppercase">Người dùng</h2>
           </div>
 
           <div className="w-full flex flex-col border-2 rounded-md shadow-md p-5">
             <h3 className="text-xl mb-3">Danh sách người dùng</h3>
-            <input type="text" className="p-3 rounded-md max-w-250-px" placeholder="Tìm kiếm người dùng" onChange={(e) => {
+            <input type="text" className="p-3 rounded-md max-w-250-px" placeholder="Tìm kiếm" onChange={(e) => {
               setSearchTerm(e.target.value)
               run(pagination)
             }} />
@@ -61,25 +73,25 @@ const Dashboard = () => {
                         <tr>
                           <th
                             scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-140-px"
                           >
                             Tên
                           </th>
                           <th
                             scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-140-px"
                           >
                             Email
                           </th>
                           <th
                             scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-140-px"
                           >
                             Số điện thoại
                           </th>
                           <th
                             scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-140-px"
                           >
                             Username
                           </th>
