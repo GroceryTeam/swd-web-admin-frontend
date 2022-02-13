@@ -12,6 +12,7 @@
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.11",
     "@umijs/hooks": "^1.9.3",
+    "antd": "^4.18.6",
     "axios": "^0.25.0",
     "chart.js": "3.1.0",
     "classnames": "2.3.1",
