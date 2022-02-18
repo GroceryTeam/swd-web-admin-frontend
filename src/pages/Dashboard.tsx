@@ -1,119 +1,126 @@
-import { getUsers } from 'api/userApi'
 import { User } from 'entities/user'
-import { useState } from 'react'
-import { useRequest } from '@umijs/hooks'
+import { useCallback, useEffect, useState } from 'react'
+import SimpleSidebar from 'components/Sidebar'
+import { Box, Flex, Input, Spinner, Text } from '@chakra-ui/react'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { fetchUsers } from 'store/user/userThunk'
+import { setSearchTermAction } from 'store/user'
+import Pagination from 'components/Pagination'
+import { useDebounce } from '@umijs/hooks'
 
 const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState('')
+  const debouncedSearchTerm = useDebounce(searchTerm, 300)
 
-  const { data, run, loading, pagination } = useRequest(
-    ({ current, pageSize }) => getUsers({ current, pageSize, searchTerm }),
-    {
-      paginated: true,
-      defaultPageSize: 5,
-      debounceInterval: 300,
+  const dispatch = useAppDispatch()
+  const { users, pagination, loading, searchTerm: searchTermState } = useAppSelector((state) => state.user)
+
+  const searchUsers = useCallback(() => {
+    dispatch(
+      fetchUsers({ searchTerm: debouncedSearchTerm, pageIndex: pagination?.pageIndex, pageSize: pagination?.pageSize })
+    )
+  }, [dispatch, pagination, debouncedSearchTerm])
+
+  const fetchNextPage = useCallback(() => {
+    dispatch(
+      fetchUsers({
+        searchTerm: debouncedSearchTerm,
+        pageIndex: (pagination?.pageIndex ?? 0) + 1,
+        pageSize: pagination?.pageSize,
+      })
+    )
+  }, [dispatch, pagination, debouncedSearchTerm])
+
+  const fetchPrevPage = useCallback(() => {
+    dispatch(
+      fetchUsers({
+        searchTerm: debouncedSearchTerm,
+        pageIndex: (pagination?.pageIndex ?? 1) - 1,
+        pageSize: pagination?.pageSize,
+      })
+    )
+  }, [dispatch, pagination, debouncedSearchTerm])
+
+  useEffect(() => {
+    dispatch(fetchUsers({}))
+  }, [dispatch])
+
+  useEffect(() => {
+    if (searchTermState === debouncedSearchTerm) return
+    if (debouncedSearchTerm && debouncedSearchTerm === searchTerm) {
+      searchUsers()
+      dispatch(setSearchTermAction(debouncedSearchTerm))
     }
-  )
+  }, [dispatch, debouncedSearchTerm, searchTerm, searchUsers, searchTermState])
 
   return (
-    <div className="flex w-screen max-w-screen-xl mx-auto bg-gray-100">
-      <div className="w-1/5 max-w-360-px border-2 py-12 h-screen bg-teal-100">
-        <div className="flex flex-col px-4">
-          <div className="flex-1 text-lg mb-3 p-3 rounded-md">Trang chủ</div>
-          <div className="flex-1 text-lg mb-3 bg-white p-3 rounded-md">Người dùng</div>
-          <div className="flex-1 text-lg mb-3 p-3 rounded-md">Thương hiệu</div>
-          <div className="flex-1 text-lg mb-3 p-3 rounded-md">Cửa hàng</div>
-          <div className="flex-1 text-lg mb-3 p-3 rounded-md">Yêu cầu mở cửa hàng</div>
-        </div>
-      </div>
-
-      <div className="w-4/5 py-12 h-screen">
-        <div className="flex flex-col px-4">
-          <div className="flex-1 mb-6">
-            <h2 className="text-3xl uppercase">Người dùng</h2>
-          </div>
-
-          <div className="w-full flex flex-col border-2 rounded-md shadow-md p-5">
-            <h3 className="text-xl mb-3">Danh sách người dùng</h3>
-            <input
-              type="text"
-              className="p-3 rounded-md max-w-250-px"
-              placeholder="Tìm kiếm"
-              onChange={(e) => {
-                setSearchTerm(e.target.value)
-                run(pagination)
-              }}
-            />
-            <div className="flex flex-col">
-              <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                  <div className="overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                    <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-500">
-                        <tr>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-140-px"
-                          >
-                            Tên
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-140-px"
-                          >
-                            Email
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-140-px"
-                          >
-                            Số điện thoại
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-140-px"
-                          >
-                            Username
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="bg-white divide-y divide-gray-200">
-                        {loading ? (
-                          <tr>
-                            <td className="px-6 py-4 whitespace-nowrap w-full rounded-md">Loading...</td>
-                          </tr>
-                        ) : (
-                          !!data &&
-                          data?.data.length > 0 &&
-                          data?.data.map((user: User) => (
-                            <tr key={user.id} className="border-b-2 rounded-md">
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="flex items-center">
-                                  <div className="flex-shrink-0 w-30">{user.name}</div>
-                                </div>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm text-gray-900">{user.email}</div>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                  {user.phone}
-                                </span>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.username}</td>
-                            </tr>
-                          ))
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <SimpleSidebar>
+      <Box mt={16}>
+        <Flex flexDir={['column']}>
+          <Text fontSize={['2xl', '3xl']} fontWeight="semibold" mb={6}>
+            Người dùng
+          </Text>
+          <Flex flexDir={['column']} maxWidth={'1120'}>
+            <Text fontSize={['lg', 'xl']} fontWeight="medium" mb={6}>
+              Danh sách người dùng
+            </Text>
+            <Flex flexDir={['column']} bg="white" p={6} shadow="md" borderRadius={'md'}>
+              <Input
+                type="text"
+                p={3}
+                maxWidth={'240'}
+                mb={3}
+                placeholder="Tìm kiếm"
+                onChange={(e) => {
+                  setSearchTerm(e.target.value)
+                }}
+              />
+              <Box overflow="auto">
+                <Box minWidth="720" py={2}>
+                  <Flex flexDir={['column']}>
+                    <Flex width="100%">
+                      <Text fontWeight={'medium'} flex="1 0 25%">
+                        Tên
+                      </Text>
+                      <Text fontWeight={'medium'} flex="1 0 25%">
+                        Email
+                      </Text>
+                      <Text fontWeight={'medium'} flex="1 0 25%">
+                        Số điện thoại
+                      </Text>
+                      <Text fontWeight={'medium'} flex="1 0 25%">
+                        Username
+                      </Text>
+                    </Flex>
+                    {loading ? (
+                      <Flex width="100%" mx="auto" justifyContent={'center'} height="100%" p={12}>
+                        <Spinner />
+                      </Flex>
+                    ) : !!users && users?.length > 0 ? (
+                      users.map((user: User) => (
+                        <Flex key={user.id} width="100%" py={2} borderBottom="1px solid" borderBottomColor={'gray.300'}>
+                          <Text flex="1 0 25%">{user.name}</Text>
+                          <Text flex="1 0 25%">{user.email}</Text>
+                          <Text flex="1 0 25%">{user.phone}</Text>
+                          <Text flex="1 0 25%">{user.username}</Text>
+                        </Flex>
+                      ))
+                    ) : (
+                      <Flex width="100%" mx="auto" justifyContent={'center'} height="100%" p={12}>
+                        Không tìm thấy dữ liệu phù hợp
+                      </Flex>
+                    )}
+                  </Flex>
+                </Box>
+              </Box>
+              <Box ml="auto" mt={4}>
+                <Pagination pagination={pagination} fetchNextPage={fetchNextPage} fetchPrevPage={fetchPrevPage} />
+              </Box>
+            </Flex>
+          </Flex>
+        </Flex>
+      </Box>
+    </SimpleSidebar>
   )
 }
 export default Dashboard

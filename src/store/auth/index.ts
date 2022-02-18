@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { login } from './authThunk'
+import { login, signOut } from './authThunk'
 
 interface LoginState {
   token: string | null
@@ -28,15 +28,13 @@ export const authSlice = createSlice({
       .addCase(login.rejected, (state) => {
         state.loading = false
       })
-
-    // [signOut.fulfilled]: (state, action) => {
-    //   state.loading = false
-    //   state.userData = {}
-    //   state.token = null
-    // },
+      .addCase(signOut.pending, (state) => {
+        state.loading = false
+        state.token = null
+      })
   },
 })
 
-// export const {} = authSlice.actions
+// export const {  } = authSlice.actions
 
 export default authSlice.reducer

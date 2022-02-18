@@ -1,18 +1,10 @@
 import axiosClient from 'api/apiClient'
-import { UserResponse } from 'entities/user'
+import { UserResponse, UsersRequest } from 'entities/user'
 
-export const getUsers = async ({
-  current,
-  pageSize,
-  searchTerm = '',
-}: {
-  searchTerm?: string
-  current?: number
-  pageSize?: number
-}) => {
+export const fetchUsersApi = async ({ pageIndex, pageSize, searchTerm = '' }: UsersRequest) => {
   return axiosClient
     .get(
-      `/users?search-term=${searchTerm}${current ? `&page-index=${current}` : ''}${
+      `/users?search-term=${searchTerm}${pageIndex ? `&page-index=${pageIndex}` : ''}${
         pageSize ? `&page-size=${pageSize}` : ''
       }`
     )

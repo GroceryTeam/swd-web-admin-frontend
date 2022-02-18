@@ -1,10 +1,10 @@
 import { Box, Button, Flex, Image, Input, Text } from '@chakra-ui/react'
 import { useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router'
 import { login } from 'store/auth/authThunk'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { getToken } from 'utils/helpers'
-import history from 'utils/history'
 
 const Login = () => {
   const {
@@ -19,6 +19,8 @@ const Login = () => {
   const dispatch = useAppDispatch()
   const { token, loading } = useAppSelector((state) => state.auth)
 
+  const navigate = useNavigate()
+
   const onSubmit = useCallback(
     (values) => {
       dispatch(login(values))
@@ -28,13 +30,13 @@ const Login = () => {
 
   useEffect(() => {
     if (token || getToken()) {
-      history.push('/dashboard')
+      navigate('/dashboard')
     }
-  }, [token])
+  }, [token, navigate])
 
   return (
     <Box>
-      <Flex flexDirection={['column']} alignItems={['center']} maxWidth={1200}>
+      <Flex flexDirection={['column']} alignItems={['center']} mx="auto" maxWidth={1200}>
         {/* Logo */}
         <Image src="/img/login_1.png" width={24} height={24} />
 

@@ -16,3 +16,9 @@ export interface LoginProps {
   username: string
   password: string
 }
+
+export interface UsersRequest {
+  searchTerm?: string
+  pageIndex?: number
+  pageSize?: number
+}
