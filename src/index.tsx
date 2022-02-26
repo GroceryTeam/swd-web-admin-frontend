@@ -6,9 +6,11 @@ import { Provider } from 'react-redux'
 
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import { store } from 'store/store'
+import { IsUserRedirectOutlet, LayoutOutlet, PrivateOutlet } from 'CustomRoutes'
 
 const Login = lazy(() => import('pages/Login'))
 const Dashboard = lazy(() => import('pages/Dashboard'))
+const StoreApprove = lazy(() => import('pages/StoreApprove'))
 
 ReactDOM.render(
   <ChakraProvider>
@@ -16,9 +18,14 @@ ReactDOM.render(
       <BrowserRouter>
         <Suspense fallback={<>Loading...</>}>
           <Routes>
-            <Route path="/" element={<Outlet />}>
-              <Route index element={<Login />} />
-              <Route path="dashboard" element={<Dashboard />} />
+            <Route path="/" element={<LayoutOutlet />}>
+              <Route element={<IsUserRedirectOutlet />}>
+                <Route index element={<Login />} />
+              </Route>
+              <Route element={<PrivateOutlet />}>
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="store-approve" element={<StoreApprove />} />
+              </Route>
             </Route>
           </Routes>
         </Suspense>

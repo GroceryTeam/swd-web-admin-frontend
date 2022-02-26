@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 import {
   IconButton,
   Box,
@@ -28,17 +28,20 @@ import { ReactText } from 'react'
 import { useNavigate } from 'react-router'
 import { useAppDispatch } from 'store/hooks'
 import { signOut } from 'store/auth/authThunk'
+import { Link as RouterLink } from 'react-router-dom'
+import Logo from './Logo'
 
 interface LinkItemProps {
   name: string
   icon: IconType
+  route: string
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Trang chủ', icon: FiHome },
-  { name: 'Người dùng', icon: FiTrendingUp },
-  { name: 'Thương hiệu', icon: FiCompass },
-  { name: 'Cửa hàng', icon: FiStar },
-  { name: 'Yêu cầu mở cửa hàng', icon: FiSettings },
+  { name: 'Trang chủ', icon: FiHome, route: '/dashboard' },
+  { name: 'Người dùng', icon: FiTrendingUp, route: '/users' },
+  { name: 'Thương hiệu', icon: FiCompass, route: '/brands' },
+  { name: 'Cửa hàng', icon: FiStar, route: '/stores' },
+  { name: 'Duyệt cửa hàng', icon: FiSettings, route: '/store-approve' },
 ]
 
 export default function SidebarWithHeader({ children }: { children: ReactNode }) {
@@ -85,13 +88,11 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          Logo
-        </Text>
+        <Logo />
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
+        <NavItem key={link.name} icon={link.icon} route={link.route}>
           {link.name}
         </NavItem>
       ))}
@@ -102,10 +103,11 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 interface NavItemProps extends FlexProps {
   icon: IconType
   children: ReactText
+  route: string
 }
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+const NavItem = ({ icon, children, route, ...rest }: NavItemProps) => {
   return (
-    <Link href="#" style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+    <Link as={RouterLink} to={route} style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
       <Flex
         align="center"
         p="4"
@@ -161,8 +163,8 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         icon={<FiMenu />}
       />
 
-      <Text display={{ base: 'flex', md: 'none' }} fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-        Logo
+      <Text display={{ base: 'flex', md: 'none' }}>
+        <Logo />
       </Text>
 
       <HStack spacing={{ base: '0', md: '6' }}>

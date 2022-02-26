@@ -1,10 +1,8 @@
 import { Box, Button, Flex, Image, Input, Text } from '@chakra-ui/react'
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router'
 import { login } from 'store/auth/authThunk'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import { getToken } from 'utils/helpers'
 
 const Login = () => {
   const {
@@ -17,9 +15,7 @@ const Login = () => {
   const passwordReg = register('password', { required: true })
 
   const dispatch = useAppDispatch()
-  const { token, loading } = useAppSelector((state) => state.auth)
-
-  const navigate = useNavigate()
+  const { loading } = useAppSelector((state) => state.auth)
 
   const onSubmit = useCallback(
     (values) => {
@@ -27,12 +23,6 @@ const Login = () => {
     },
     [dispatch]
   )
-
-  useEffect(() => {
-    if (token || getToken()) {
-      navigate('/dashboard')
-    }
-  }, [token, navigate])
 
   return (
     <Box>
