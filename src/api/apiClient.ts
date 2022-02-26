@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { getToken } from 'utils/helpers'
 
 const baseURL = process.env.REACT_APP_API
 
@@ -13,7 +14,7 @@ const axiosClient = axios.create({
 export default axiosClient
 
 axiosClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token')
+  const token = getToken()
   if (token && config?.headers) {
     config.headers['Authorization'] = 'Bearer ' + token
   }
