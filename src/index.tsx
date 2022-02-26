@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter, Route, Routes, Outlet } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { ChakraProvider } from '@chakra-ui/react'
 import { Provider } from 'react-redux'
 
