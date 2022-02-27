@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { PaginationResponse } from 'entities/pagination'
 import { CustomerStore } from 'entities/store'
+import { StoreApproveStatus } from 'utils/constants'
 import { fetchStoresAsyncThunk, approveStoreAsyncThunk } from './storeThunk'
 
 interface CustomerStoreState {
@@ -9,6 +10,8 @@ interface CustomerStoreState {
   isIndexPageChange: boolean
   loading: boolean
   loadingApprove: boolean
+  approveSuccess: boolean
+  approveStatus?: StoreApproveStatus
 }
 
 const initialState = {
@@ -17,6 +20,8 @@ const initialState = {
   isIndexPageChange: false,
   loading: false,
   loadingApprove: false,
+  approveSuccess: false,
+  approveStatus: undefined,
 } as CustomerStoreState
 
 export const storesSlice = createSlice({
@@ -27,6 +32,12 @@ export const storesSlice = createSlice({
       if (!state?.pagination) return
       state.isIndexPageChange = true
       state.pagination = { ...state.pagination, pageIndex: action.payload }
+    },
+    resetApproveSuccess: (state) => {
+      state.approveSuccess = false
+    },
+    setApproveStatus: (state, action) => {
+      state.approveStatus = action.payload
     },
   },
   extraReducers: (builder) => {
@@ -46,10 +57,11 @@ export const storesSlice = createSlice({
       })
       .addCase(approveStoreAsyncThunk.fulfilled, (state) => {
         state.loadingApprove = false
+        state.approveSuccess = true
       })
   },
 })
 
-export const { changePageIndex } = storesSlice.actions
+export const { changePageIndex, resetApproveSuccess, setApproveStatus } = storesSlice.actions
 
 export default storesSlice.reducer

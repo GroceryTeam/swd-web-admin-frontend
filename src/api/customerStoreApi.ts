@@ -1,5 +1,5 @@
 import axiosClient from 'api/apiClient'
-import { ApproveStoreRequest, CustomerStoreRequest, CustomerStoreResponse } from 'entities/store'
+import { ApproveStoreRequest, CustomerStore, CustomerStoreRequest, CustomerStoreResponse } from 'entities/store'
 
 export const getStoresApi = async ({
   searchTerm,
@@ -23,8 +23,10 @@ export const getStoresApi = async ({
 
 export const approveStoreApi = async ({ storeId, status }: ApproveStoreRequest) => {
   return axiosClient.put(`/stores/${storeId}/status`, {
-    params: {
-      status,
-    },
+    status,
   })
+}
+
+export const getStoreByStoreIdApi = async ({ storeId }: { storeId: number }) => {
+  return axiosClient.get(`/stores/${storeId}`).then((res) => res?.data as CustomerStore)
 }

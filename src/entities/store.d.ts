@@ -1,4 +1,5 @@
 import { StoreApproveStatus } from 'utils/constants'
+import { Brand } from './brand'
 import { PaginationResponse } from './pagination'
 
 export interface CustomerStoreRequest {
@@ -16,6 +17,8 @@ export interface ApproveStoreRequest {
 export interface CustomerStore {
   id: number
   brandId: number
+  brandName: string
+  brand: Brand
   name: string
   address: string
   approvedStatus: number
