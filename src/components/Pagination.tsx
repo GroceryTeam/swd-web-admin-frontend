@@ -10,12 +10,12 @@ type PaginationProps = {
 const Pagination = ({ pagination, fetchNextPage, fetchPrevPage }: PaginationProps) => {
   return (
     <Flex alignItems="center">
+      <Button disabled={pagination?.pageIndex === 1} onClick={() => fetchPrevPage()}>
+        <FiChevronLeft />
+      </Button>
       <Text>
         {pagination?.pageIndex}/{pagination?.totalPage}
       </Text>
-      <Button disabled={pagination?.pageIndex === 1} onClick={() => fetchPrevPage()} ml={6}>
-        <FiChevronLeft />
-      </Button>
       <Button ml={3} disabled={pagination?.pageIndex === pagination?.totalPage} onClick={() => fetchNextPage()}>
         <FiChevronRight />
       </Button>

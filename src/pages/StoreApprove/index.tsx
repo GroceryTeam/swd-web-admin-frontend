@@ -1,17 +1,21 @@
 import {
   Box,
   Button,
-  ButtonGroup,
   Flex,
-  Grid,
-  GridItem,
   //   Modal,
   //   ModalBody,
   //   ModalContent,
   //   ModalHeader,
   //   ModalOverlay,
   Spinner,
+  Table,
+  TableCaption,
+  Tbody,
+  Td,
   Text,
+  Th,
+  Thead,
+  Tr,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react'
@@ -100,31 +104,150 @@ const StoreApprove = () => {
   }, [approveSuccess, approveStatus, onApprovingClose, onRejectingClose, toast])
 
   return (
-    <Box>
-      <Flex alignItems="center" flexDirection={['column', 'row']} mb={6}>
-        <Text fontSize={['xl', '2xl']} fontWeight="bold">
-          Danh sách cửa hàng cần duyệt
-        </Text>
-        <Button
-          ml={[2, 3, 4]}
-          colorScheme={'cyan'}
-          onClick={() => dispatch(fetchStoresAsyncThunk({ approveStatus: StoreApproveStatus.Pending }))}
-          size="sm"
-          rightIcon={<AiOutlineReload />}
-          variant={'outline'}
-          disabled={loading}
-        >
-          Tải lại thông tin
-        </Button>
+    <Box overflowY={'hidden'}>
+      <Flex alignItems="center" justifyContent="center" flexDirection={['column', 'row']} mb={6}>
+        <Box display={'flex'} justifyContent={'center'} alignContent={'center'}>
+          <Text fontSize={['xl', '2xl']} fontWeight="bold">
+            Danh sách cửa hàng cần duyệt
+          </Text>
+          <Button
+            ml={[2, 3, 4]}
+            colorScheme={'cyan'}
+            onClick={() => dispatch(fetchStoresAsyncThunk({ approveStatus: StoreApproveStatus.Pending }))}
+            size="sm"
+            rightIcon={<AiOutlineReload />}
+            variant={'outline'}
+            disabled={loading}
+            margin={'auto'}
+          >
+            Tải lại thông tin
+          </Button>
+        </Box>
       </Flex>
-      <Grid
+      <Table
+        variant="striped"
+        maxWidth="1028px"
+        size={'md'}
+        margin={'auto'}
+        border="2px solid"
+        borderColor="gray.800"
+        borderRadius={{ base: 'md' }}
+      >
+        <TableCaption>This is caption of table</TableCaption>
+        <Thead>
+          <Tr>
+            <Th textAlign={'center'} fontSize={'1.5xl'}>
+              Brand Name
+            </Th>
+            <Th textAlign={'center'} fontSize={'1.5xl'}>
+              Name
+            </Th>
+            <Th textAlign={'center'} fontSize={'1.5xl'}>
+              Address
+            </Th>
+            <Th textAlign={'center'} fontSize={'1.5xl'}>
+              Action Approve
+            </Th>
+            <Th textAlign={'center'} fontSize={'1.5xl'}>
+              Action Reject
+            </Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {loading ? (
+            <Spinner flex={1} textAlign={'center'} justifyContent={'center'} alignItems={'center'} />
+          ) : (
+            storeList &&
+            storeList?.map((store) => (
+              <Tr key={store.id}>
+                <Td>{store.brandName}</Td>
+                <Td>{store.name}</Td>
+                <Td>{store.address}</Td>
+                <Td textAlign={'center'}>
+                  <Button
+                    colorScheme="teal"
+                    onClick={() => {
+                      setCurrentStore(store)
+                      onApprovingOpen()
+                    }}
+                  >
+                    Duyệt
+                  </Button>
+                </Td>
+                <Td textAlign={'center'}>
+                  <Button
+                    colorScheme="red"
+                    onClick={() => {
+                      setCurrentStore(store)
+                      onRejectingOpen()
+                    }}
+                  >
+                    Hủy
+                  </Button>
+                </Td>
+              </Tr>
+            ))
+          )}
+        </Tbody>
+      </Table>
+      <Box
+        mt={6}
+        bg="whiteAlpha.800"
+        p={3}
+        width="fit-content"
+        borderRadius="md"
+        mx={['auto', 'auto', 0]}
+        display={storeList && storeList?.length > 0 ? 'block' : 'none'}
+        margin={'auto'}
+      >
+        <Pagination pagination={pagination} fetchNextPage={fetchNextPage} fetchPrevPage={fetchPrevPage} />
+      </Box>
+      {storeList && storeList?.length <= 0 && <Box>Chưa có yêu cầu nào cần được xử lý</Box>}
+      {/* <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Đang duyệt cửa hàng</ModalHeader>
+          <ModalBody>
+            <Flex flexDir={'column'} alignItems={'center'} justifyContent={'center'}>
+              <Text mb={3}>Xin vui lòng đợi trong giây lát...</Text>
+              <Spinner />
+            </Flex>
+          </ModalBody>
+        </ModalContent>
+      </Modal> */}
+      <ApproveModal
+        isOpen={isApprovingOpen}
+        closeModal={onApprovingClose}
+        customerStore={currentStore}
+        handleApprove={() =>
+          handleApproveStore({ storeId: currentStore?.id ?? 0, status: StoreApproveStatus.Approved })
+        }
+        loading={loadingApprove}
+      />
+      <ApproveModal
+        isOpen={isRejectingOpen}
+        isApproving={false}
+        closeModal={onRejectingClose}
+        customerStore={currentStore}
+        handleApprove={() =>
+          handleApproveStore({ storeId: currentStore?.id ?? 0, status: StoreApproveStatus.Rejected })
+        }
+        loading={loadingApprove}
+      />
+    </Box>
+  )
+}
+export default StoreApprove
+
+/*
+<Grid
         templateColumns={['1fr', '1fr', 'repeat(2, 1fr)', 'repeat(auto-fit, calc(100% / 3))']}
         gap={3}
         justifyItems={{ base: 'center', md: 'flex-start' }}
         maxWidth="1028px"
       >
         {loading ? (
-          <Spinner />
+          <Spinner flex={1} textAlign={'center'} justifyContent={'center'} alignItems={'center'} />
         ) : (
           storeList &&
           storeList?.map((store) => (
@@ -173,50 +296,4 @@ const StoreApprove = () => {
           ))
         )}
       </Grid>
-      <Box
-        mt={6}
-        bg="whiteAlpha.800"
-        p={3}
-        width="fit-content"
-        borderRadius="md"
-        mx={['auto', 'auto', 0]}
-        display={storeList && storeList?.length > 0 ? 'block' : 'none'}
-      >
-        <Pagination pagination={pagination} fetchNextPage={fetchNextPage} fetchPrevPage={fetchPrevPage} />
-      </Box>
-      {storeList && storeList?.length <= 0 && <Box>Chưa có yêu cầu nào cần được xử lý</Box>}
-      {/* <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Đang duyệt cửa hàng</ModalHeader>
-          <ModalBody>
-            <Flex flexDir={'column'} alignItems={'center'} justifyContent={'center'}>
-              <Text mb={3}>Xin vui lòng đợi trong giây lát...</Text>
-              <Spinner />
-            </Flex>
-          </ModalBody>
-        </ModalContent>
-      </Modal> */}
-      <ApproveModal
-        isOpen={isApprovingOpen}
-        closeModal={onApprovingClose}
-        customerStore={currentStore}
-        handleApprove={() =>
-          handleApproveStore({ storeId: currentStore?.id ?? 0, status: StoreApproveStatus.Approved })
-        }
-        loading={loadingApprove}
-      />
-      <ApproveModal
-        isOpen={isRejectingOpen}
-        isApproving={false}
-        closeModal={onRejectingClose}
-        customerStore={currentStore}
-        handleApprove={() =>
-          handleApproveStore({ storeId: currentStore?.id ?? 0, status: StoreApproveStatus.Rejected })
-        }
-        loading={loadingApprove}
-      />
-    </Box>
-  )
-}
-export default StoreApprove
+ */
