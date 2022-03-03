@@ -53,12 +53,12 @@ const Dashboard = () => {
   }, [dispatch, debouncedSearchTerm, searchTerm, searchUsers, searchTermState])
 
   return (
-    <Box mt={16}>
-      <Flex flexDir={['column']}>
+    <Box overflow={'hidden'}>
+      <Flex flexDir={['column']} justifyContent={'center'} alignItems={'center'}>
         <Text fontSize={['2xl', '3xl']} fontWeight="semibold" mb={6}>
-          Người dùng
+          NGƯỜI DÙNG
         </Text>
-        <Flex flexDir={['column']} maxWidth={'1120'}>
+        <Flex flexDir={['column']} minWidth={'1024'} maxWidth={'1120'}>
           <Text fontSize={['lg', 'xl']} fontWeight="medium" mb={6}>
             Danh sách người dùng
           </Text>

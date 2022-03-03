@@ -108,7 +108,7 @@ const StoreApprove = () => {
       <Flex alignItems="center" justifyContent="center" flexDirection={['column', 'row']} mb={6}>
         <Box display={'flex'} justifyContent={'center'} alignContent={'center'}>
           <Text fontSize={['xl', '2xl']} fontWeight="bold">
-            Danh sách cửa hàng cần duyệt
+            DANH SÁCH CỬA HÀNG CẦN DUYỆT
           </Text>
           <Button
             ml={[2, 3, 4]}
@@ -126,6 +126,7 @@ const StoreApprove = () => {
       </Flex>
       <Table
         variant="striped"
+        bg={'white'}
         maxWidth="1028px"
         size={'md'}
         margin={'auto'}
@@ -155,11 +156,13 @@ const StoreApprove = () => {
         </Thead>
         <Tbody>
           {loading ? (
-            <Spinner flex={1} textAlign={'center'} justifyContent={'center'} alignItems={'center'} />
+            <Flex width="100%" margin="auto" justifyContent={'center'} height="100%">
+              <Spinner />
+            </Flex>
           ) : (
             storeList &&
             storeList?.map((store) => (
-              <Tr key={store.id}>
+              <Tr key={store.id} borderBottom="1px solid grey">
                 <Td>{store.brandName}</Td>
                 <Td>{store.name}</Td>
                 <Td>{store.address}</Td>
@@ -196,7 +199,6 @@ const StoreApprove = () => {
         p={3}
         width="fit-content"
         borderRadius="md"
-        mx={['auto', 'auto', 0]}
         display={storeList && storeList?.length > 0 ? 'block' : 'none'}
         margin={'auto'}
       >

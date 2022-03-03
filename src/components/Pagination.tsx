@@ -13,7 +13,7 @@ const Pagination = ({ pagination, fetchNextPage, fetchPrevPage }: PaginationProp
       <Button disabled={pagination?.pageIndex === 1} onClick={() => fetchPrevPage()}>
         <FiChevronLeft />
       </Button>
-      <Text>
+      <Text ml={3}>
         {pagination?.pageIndex}/{pagination?.totalPage}
       </Text>
       <Button ml={3} disabled={pagination?.pageIndex === pagination?.totalPage} onClick={() => fetchNextPage()}>
