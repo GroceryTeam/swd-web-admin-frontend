@@ -2,11 +2,6 @@ import {
   Box,
   Button,
   Flex,
-  //   Modal,
-  //   ModalBody,
-  //   ModalContent,
-  //   ModalHeader,
-  //   ModalOverlay,
   Spinner,
   Table,
   Tbody,
@@ -26,9 +21,9 @@ import { setApproveStatus } from 'store/customerStores'
 import { approveStoreAsyncThunk, fetchStoresAsyncThunk } from 'store/customerStores/storeThunk'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { StoreApproveStatus } from 'utils/constants'
-import ApproveModal from './ApproveModal'
+import RemoveModal from './RemoveModal'
 
-const StoreApprove = () => {
+const Store = () => {
   const dispatch = useAppDispatch()
   const { storeList, pagination, loading, loadingApprove, approveSuccess, approveStatus } = useAppSelector(
     (state) => state.store
@@ -37,8 +32,7 @@ const StoreApprove = () => {
 
   const [currentStore, setCurrentStore] = useState<CustomerStore | undefined>(undefined)
 
-  const { isOpen: isApprovingOpen, onOpen: onApprovingOpen, onClose: onApprovingClose } = useDisclosure()
-  const { isOpen: isRejectingOpen, onOpen: onRejectingOpen, onClose: onRejectingClose } = useDisclosure()
+  const { isOpen: isRemovingOpen, onOpen: onRemovingOpen, onClose: onRemovingClose } = useDisclosure()
 
   const fetchNextPage = useCallback(() => {
     dispatch(
@@ -60,7 +54,7 @@ const StoreApprove = () => {
     )
   }, [dispatch, pagination])
 
-  const handleApproveStore = useCallback(
+  const handleRemoveStore = useCallback(
     (values: ApproveStoreRequest) => {
       dispatch(setApproveStatus(values.status))
       dispatch(approveStoreAsyncThunk(values))
@@ -77,22 +71,11 @@ const StoreApprove = () => {
 
   useEffect(() => {
     if (approveSuccess) {
-      if (approveStatus === StoreApproveStatus.Approved) {
-        onApprovingClose()
-        toast({
-          title: 'Thông báo',
-          description: 'Duyệt thành công',
-          status: 'success',
-          duration: 5000,
-          isClosable: true,
-        })
-        return
-      }
       if (approveStatus === StoreApproveStatus.Rejected) {
-        onRejectingClose()
+        onRemovingClose()
         toast({
           title: 'Thông báo',
-          description: 'Hủy thành công',
+          description: 'Dừng hoạt động Store thành công',
           status: 'success',
           duration: 5000,
           isClosable: true,
@@ -100,19 +83,19 @@ const StoreApprove = () => {
         return
       }
     }
-  }, [approveSuccess, approveStatus, onApprovingClose, onRejectingClose, toast])
+  }, [approveSuccess, approveStatus, onRemovingClose, toast])
 
   return (
     <Box overflowY={'hidden'}>
       <Flex alignItems="center" justifyContent="center" flexDirection={['column', 'row']} mb={6}>
         <Box display={'flex'} justifyContent={'center'} alignContent={'center'}>
           <Text fontSize={['xl', '2xl']} fontWeight="bold">
-            DANH SÁCH CỬA HÀNG CẦN DUYỆT
+            DANH SÁCH CỬA HÀNG ĐANG HOẠT ĐỘNG
           </Text>
           <Button
             ml={[2, 3, 4]}
             colorScheme={'cyan'}
-            onClick={() => dispatch(fetchStoresAsyncThunk({ approveStatus: StoreApproveStatus.Pending }))}
+            onClick={() => dispatch(fetchStoresAsyncThunk({ approveStatus: StoreApproveStatus.Approved }))}
             size="sm"
             rightIcon={<AiOutlineReload />}
             variant={'outline'}
@@ -135,19 +118,16 @@ const StoreApprove = () => {
           <Thead>
             <Tr>
               <Th textAlign={'center'} fontSize={'1.5xl'}>
-                Brand Name
+                CỬA HÀNG
               </Th>
               <Th textAlign={'center'} fontSize={'1.5xl'}>
-                Name
+                BRAND
               </Th>
               <Th textAlign={'center'} fontSize={'1.5xl'}>
-                Address
+                ĐỊA CHỈ
               </Th>
               <Th textAlign={'center'} fontSize={'1.5xl'}>
-                Approve
-              </Th>
-              <Th textAlign={'center'} fontSize={'1.5xl'}>
-                Reject
+                ACTION REMOVE
               </Th>
             </Tr>
           </Thead>
@@ -160,29 +140,18 @@ const StoreApprove = () => {
               storeList &&
               storeList?.map((store) => (
                 <Tr key={store.id} borderBottom="1px solid grey">
-                  <Td>{store.brandName}</Td>
                   <Td>{store.name}</Td>
+                  <Td>{store.brandName}</Td>
                   <Td>{store.address}</Td>
-                  <Td textAlign={'center'}>
-                    <Button
-                      colorScheme="teal"
-                      onClick={() => {
-                        setCurrentStore(store)
-                        onApprovingOpen()
-                      }}
-                    >
-                      Duyệt
-                    </Button>
-                  </Td>
                   <Td textAlign={'center'}>
                     <Button
                       colorScheme="red"
                       onClick={() => {
                         setCurrentStore(store)
-                        onRejectingOpen()
+                        onRemovingOpen()
                       }}
                     >
-                      Hủy
+                      Dừng
                     </Button>
                   </Td>
                 </Tr>
@@ -203,97 +172,15 @@ const StoreApprove = () => {
         <Pagination pagination={pagination} fetchNextPage={fetchNextPage} fetchPrevPage={fetchPrevPage} />
       </Box>
       {storeList && storeList?.length <= 0 && <Box>Chưa có yêu cầu nào cần được xử lý</Box>}
-      {/* <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Đang duyệt cửa hàng</ModalHeader>
-          <ModalBody>
-            <Flex flexDir={'column'} alignItems={'center'} justifyContent={'center'}>
-              <Text mb={3}>Xin vui lòng đợi trong giây lát...</Text>
-              <Spinner />
-            </Flex>
-          </ModalBody>
-        </ModalContent>
-      </Modal> */}
-      <ApproveModal
-        isOpen={isApprovingOpen}
-        closeModal={onApprovingClose}
+      <RemoveModal
+        isOpen={isRemovingOpen}
+        isRemoving={false}
+        closeModal={onRemovingClose}
         customerStore={currentStore}
-        handleApprove={() =>
-          handleApproveStore({ storeId: currentStore?.id ?? 0, status: StoreApproveStatus.Approved })
-        }
-        loading={loadingApprove}
-      />
-      <ApproveModal
-        isOpen={isRejectingOpen}
-        isApproving={false}
-        closeModal={onRejectingClose}
-        customerStore={currentStore}
-        handleApprove={() =>
-          handleApproveStore({ storeId: currentStore?.id ?? 0, status: StoreApproveStatus.Rejected })
-        }
+        handleRemove={() => handleRemoveStore({ storeId: currentStore?.id ?? 0, status: StoreApproveStatus.Rejected })}
         loading={loadingApprove}
       />
     </Box>
   )
 }
-export default StoreApprove
-
-/*
-<Grid
-        templateColumns={['1fr', '1fr', 'repeat(2, 1fr)', 'repeat(auto-fit, calc(100% / 3))']}
-        gap={3}
-        justifyItems={{ base: 'center', md: 'flex-start' }}
-        maxWidth="1028px"
-      >
-        {loading ? (
-          <Spinner flex={1} textAlign={'center'} justifyContent={'center'} alignItems={'center'} />
-        ) : (
-          storeList &&
-          storeList?.map((store) => (
-            <GridItem
-              key={store.id}
-              bg="whiteAlpha.800"
-              borderRadius="md"
-              boxShadow={'md'}
-              width="250px"
-              height="180px"
-              p={3}
-              textAlign={'center'}
-            >
-              <Flex flexDirection="column">
-                <Text fontSize={['sm', 'md']} mb={2} noOfLines={1}>
-                  {store.brandName}
-                </Text>
-                <Text fontSize={['md', 'lg']} fontWeight={'medium'} mb={3}>
-                  {store.name}
-                </Text>
-                <Text fontSize={['xs', 'sm']} fontWeight={'normal'} noOfLines={1} mb={4}>
-                  {store.address}
-                </Text>
-                <ButtonGroup mx="auto" mt="auto">
-                  <Button
-                    colorScheme="teal"
-                    onClick={() => {
-                      setCurrentStore(store)
-                      onApprovingOpen()
-                    }}
-                  >
-                    Duyệt
-                  </Button>
-                  <Button
-                    colorScheme="red"
-                    onClick={() => {
-                      setCurrentStore(store)
-                      onRejectingOpen()
-                    }}
-                  >
-                    Hủy
-                  </Button>
-                </ButtonGroup>
-              </Flex>
-            </GridItem>
-          ))
-        )}
-      </Grid>
- */
+export default Store

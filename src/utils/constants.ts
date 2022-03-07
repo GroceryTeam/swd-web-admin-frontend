@@ -6,3 +6,8 @@ export enum StoreApproveStatus {
   Rejected,
   Disabled,
 }
+
+export enum BrandStatus {
+  Enabled,
+  Disabled,
+}

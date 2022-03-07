@@ -11,6 +11,8 @@ import { IsUserRedirectOutlet, LayoutOutlet, PrivateOutlet } from 'CustomRoutes'
 const Login = lazy(() => import('pages/Login'))
 const Dashboard = lazy(() => import('pages/Dashboard'))
 const StoreApprove = lazy(() => import('pages/StoreApprove'))
+const Brand = lazy(() => import('pages/Brand'))
+const Store = lazy(() => import('pages/Store'))
 
 ReactDOM.render(
   <ChakraProvider>
@@ -24,6 +26,8 @@ ReactDOM.render(
               </Route>
               <Route element={<PrivateOutlet />}>
                 <Route path="dashboard" element={<Dashboard />} />
+                <Route path="brands" element={<Brand />} />
+                <Route path="stores" element={<Store />} />
                 <Route path="store-approve" element={<StoreApprove />} />
               </Route>
             </Route>
