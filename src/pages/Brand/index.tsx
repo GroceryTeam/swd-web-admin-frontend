@@ -22,6 +22,7 @@ import { updateBrandAsyncThunk, fetchBrandsAsyncThunk } from 'store/brand/brandT
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { BrandStatus } from 'utils/constants'
 import UpdateModal from './UpdateBrandStatusModal'
+import { CheckCircleIcon, LockIcon, CloseIcon } from '@chakra-ui/icons'
 
 const BrandUpdate = () => {
   const dispatch = useAppDispatch()
@@ -175,7 +176,17 @@ const BrandUpdate = () => {
                 >
                   <Td>{brand.name}</Td>
                   <Td textAlign="center">{brand.storeList.length}</Td>
-                  <Td textAlign={'center'}>{brand?.status === 0 ? 'Active' : 'Not Active'}</Td>
+                  {brand?.status === 0 ? (
+                    <Td textAlign={'center'}>
+                      Hoạt động &nbsp;
+                      <CheckCircleIcon color={'green'} />
+                    </Td>
+                  ) : (
+                    <Td textAlign={'center'}>
+                      Không &nbsp;
+                      <LockIcon color={'red'} />
+                    </Td>
+                  )}
                   <Td textAlign={'center'}>
                     <Button
                       colorScheme="red"
@@ -184,7 +195,7 @@ const BrandUpdate = () => {
                         onDisablingOpen()
                       }}
                     >
-                      Dừng
+                      <CloseIcon boxSize={'0.7rem'} />
                     </Button>
                   </Td>
                 </Tr>

@@ -22,6 +22,7 @@ import { approveStoreAsyncThunk, fetchStoresAsyncThunk } from 'store/customerSto
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { StoreApproveStatus } from 'utils/constants'
 import ApproveModal from './ApproveModal'
+import { CloseIcon, CheckIcon } from '@chakra-ui/icons'
 
 const StoreApprove = () => {
   const dispatch = useAppDispatch()
@@ -186,7 +187,7 @@ const StoreApprove = () => {
                         onApprovingOpen()
                       }}
                     >
-                      Duyệt
+                      <CheckIcon boxSize={'0.8rem'} />
                     </Button>
                   </Td>
                   <Td textAlign={'center'}>
@@ -197,7 +198,7 @@ const StoreApprove = () => {
                         onRejectingOpen()
                       }}
                     >
-                      Hủy
+                      <CloseIcon boxSize={'0.7rem'} />
                     </Button>
                   </Td>
                 </Tr>

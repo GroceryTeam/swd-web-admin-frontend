@@ -22,6 +22,7 @@ import { approveStoreAsyncThunk, fetchStoresAsyncThunk } from 'store/customerSto
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { StoreApproveStatus } from 'utils/constants'
 import RemoveModal from './RemoveModal'
+import { CloseIcon } from '@chakra-ui/icons'
 
 const Store = () => {
   const dispatch = useAppDispatch()
@@ -170,7 +171,7 @@ const Store = () => {
                         onRemovingOpen()
                       }}
                     >
-                      Dừng
+                      <CloseIcon boxSize={'0.7rem'} />
                     </Button>
                   </Td>
                 </Tr>
@@ -187,7 +188,7 @@ const Store = () => {
                     height="100%"
                     p={12}
                   >
-                    Chưa có yêu cầu nào cần được xử lý
+                    Hiện không có cửa hàng nào đang hoạt động
                   </Flex>
                 </Td>
               </Tr>
