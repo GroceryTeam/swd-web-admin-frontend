@@ -2,11 +2,6 @@ import {
   Box,
   Button,
   Flex,
-  //   Modal,
-  //   ModalBody,
-  //   ModalContent,
-  //   ModalHeader,
-  //   ModalOverlay,
   Spinner,
   Table,
   Tbody,
@@ -22,7 +17,7 @@ import Pagination from 'components/Pagination'
 import { ApproveStoreRequest, CustomerStore } from 'entities/store'
 import { useCallback, useEffect, useState } from 'react'
 import { AiOutlineReload } from 'react-icons/ai'
-import { setApproveStatus } from 'store/customerStores'
+import { resetApproveSuccess, setApproveStatus } from 'store/customerStores'
 import { approveStoreAsyncThunk, fetchStoresAsyncThunk } from 'store/customerStores/storeThunk'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { StoreApproveStatus } from 'utils/constants'
@@ -73,6 +68,7 @@ const StoreApprove = () => {
       return
     }
     dispatch(fetchStoresAsyncThunk({ approveStatus: StoreApproveStatus.Pending }))
+    dispatch(resetApproveSuccess())
   }, [dispatch, loadingApprove])
 
   useEffect(() => {
@@ -85,6 +81,7 @@ const StoreApprove = () => {
           status: 'success',
           duration: 5000,
           isClosable: true,
+          onCloseComplete: () => dispatch(resetApproveSuccess()),
         })
         return
       }
@@ -96,16 +93,23 @@ const StoreApprove = () => {
           status: 'success',
           duration: 5000,
           isClosable: true,
+          onCloseComplete: () => dispatch(resetApproveSuccess()),
         })
         return
       }
     }
-  }, [approveSuccess, approveStatus, onApprovingClose, onRejectingClose, toast])
+  }, [approveSuccess, approveStatus, onApprovingClose, onRejectingClose, dispatch, toast])
 
   return (
     <Box overflowY={'hidden'}>
       <Flex alignItems="center" justifyContent="center" flexDirection={['column', 'row']} mb={6}>
-        <Box display={'flex'} justifyContent={'center'} alignContent={'center'}>
+        <Box
+          display={'flex'}
+          justifyContent={'center'}
+          alignContent={'center'}
+          textAlign={'center'}
+          position={'relative'}
+        >
           <Text fontSize={['xl', '2xl']} fontWeight="bold">
             DANH SÁCH CỬA HÀNG CẦN DUYỆT
           </Text>
@@ -118,43 +122,54 @@ const StoreApprove = () => {
             variant={'outline'}
             disabled={loading}
             margin={'auto'}
+            position={'absolute'}
+            right={'-40%'}
+            top={'6%'}
           >
             Tải lại thông tin
           </Button>
         </Box>
       </Flex>
       <Box
-        border="2px solid"
+        border="5px solid"
         borderColor="gray.800"
         borderRadius={{ base: 'md' }}
         width={'fit-content'}
         margin={'auto'}
         minWidth="1028px"
       >
-        <Table variant="striped" bg={'white'} maxWidth="1028px" size={'lg'} margin={'auto'} width={'100%'}>
-          <Thead>
+        <Table variant="simple" bg={'white'} maxWidth="1028px" size={'lg'} margin={'auto'} width={'100%'}>
+          <Thead borderBottom={'2px solid'}>
             <Tr>
-              <Th textAlign={'center'} fontSize={'1.5xl'}>
+              <Th textAlign={'center'} fontSize={'1.5xl'} w={'27%'}>
                 Brand Name
               </Th>
-              <Th textAlign={'center'} fontSize={'1.5xl'}>
+              <Th textAlign={'center'} fontSize={'1.5xl'} w={'23%'}>
                 Name
               </Th>
-              <Th textAlign={'center'} fontSize={'1.5xl'}>
+              <Th textAlign={'center'} fontSize={'1.5xl'} w={'20%'}>
                 Address
               </Th>
-              <Th textAlign={'center'} fontSize={'1.5xl'}>
+              <Th textAlign={'center'} fontSize={'1.5xl'} w={'15%'}>
                 Approve
               </Th>
-              <Th textAlign={'center'} fontSize={'1.5xl'}>
+              <Th textAlign={'center'} fontSize={'1.5xl'} w={'15%'}>
                 Reject
               </Th>
             </Tr>
           </Thead>
           <Tbody>
             {loading ? (
-              <Flex width="100%" margin="auto" justifyContent={'center'} height="100%">
-                <Spinner />
+              <Flex
+                width="100%"
+                mx="auto"
+                display={'flex'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                height="100%"
+                p={12}
+              >
+                <Spinner marginRight={-750} />
               </Flex>
             ) : (
               storeList &&
@@ -189,6 +204,22 @@ const StoreApprove = () => {
               ))
             )}
           </Tbody>
+          {!loading && storeList && storeList?.length <= 0 && (
+            <Tr>
+              <Td colSpan={5}>
+                <Flex
+                  width="100%"
+                  display={'flex'}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  height="100%"
+                  p={12}
+                >
+                  Chưa có yêu cầu nào cần được xử lý
+                </Flex>
+              </Td>
+            </Tr>
+          )}
         </Table>
       </Box>
       <Box
@@ -202,19 +233,6 @@ const StoreApprove = () => {
       >
         <Pagination pagination={pagination} fetchNextPage={fetchNextPage} fetchPrevPage={fetchPrevPage} />
       </Box>
-      {storeList && storeList?.length <= 0 && <Box>Chưa có yêu cầu nào cần được xử lý</Box>}
-      {/* <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Đang duyệt cửa hàng</ModalHeader>
-          <ModalBody>
-            <Flex flexDir={'column'} alignItems={'center'} justifyContent={'center'}>
-              <Text mb={3}>Xin vui lòng đợi trong giây lát...</Text>
-              <Spinner />
-            </Flex>
-          </ModalBody>
-        </ModalContent>
-      </Modal> */}
       <ApproveModal
         isOpen={isApprovingOpen}
         closeModal={onApprovingClose}
@@ -238,62 +256,3 @@ const StoreApprove = () => {
   )
 }
 export default StoreApprove
-
-/*
-<Grid
-        templateColumns={['1fr', '1fr', 'repeat(2, 1fr)', 'repeat(auto-fit, calc(100% / 3))']}
-        gap={3}
-        justifyItems={{ base: 'center', md: 'flex-start' }}
-        maxWidth="1028px"
-      >
-        {loading ? (
-          <Spinner flex={1} textAlign={'center'} justifyContent={'center'} alignItems={'center'} />
-        ) : (
-          storeList &&
-          storeList?.map((store) => (
-            <GridItem
-              key={store.id}
-              bg="whiteAlpha.800"
-              borderRadius="md"
-              boxShadow={'md'}
-              width="250px"
-              height="180px"
-              p={3}
-              textAlign={'center'}
-            >
-              <Flex flexDirection="column">
-                <Text fontSize={['sm', 'md']} mb={2} noOfLines={1}>
-                  {store.brandName}
-                </Text>
-                <Text fontSize={['md', 'lg']} fontWeight={'medium'} mb={3}>
-                  {store.name}
-                </Text>
-                <Text fontSize={['xs', 'sm']} fontWeight={'normal'} noOfLines={1} mb={4}>
-                  {store.address}
-                </Text>
-                <ButtonGroup mx="auto" mt="auto">
-                  <Button
-                    colorScheme="teal"
-                    onClick={() => {
-                      setCurrentStore(store)
-                      onApprovingOpen()
-                    }}
-                  >
-                    Duyệt
-                  </Button>
-                  <Button
-                    colorScheme="red"
-                    onClick={() => {
-                      setCurrentStore(store)
-                      onRejectingOpen()
-                    }}
-                  >
-                    Hủy
-                  </Button>
-                </ButtonGroup>
-              </Flex>
-            </GridItem>
-          ))
-        )}
-      </Grid>
- */

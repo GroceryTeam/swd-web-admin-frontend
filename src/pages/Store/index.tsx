@@ -17,7 +17,7 @@ import Pagination from 'components/Pagination'
 import { ApproveStoreRequest, CustomerStore } from 'entities/store'
 import { useCallback, useEffect, useState } from 'react'
 import { AiOutlineReload } from 'react-icons/ai'
-import { setApproveStatus } from 'store/customerStores'
+import { resetApproveSuccess, setApproveStatus } from 'store/customerStores'
 import { approveStoreAsyncThunk, fetchStoresAsyncThunk } from 'store/customerStores/storeThunk'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { StoreApproveStatus } from 'utils/constants'
@@ -39,7 +39,7 @@ const Store = () => {
       fetchStoresAsyncThunk({
         pageIndex: (pagination?.pageIndex ?? 0) + 1,
         pageSize: pagination?.pageSize,
-        approveStatus: StoreApproveStatus.Pending,
+        approveStatus: StoreApproveStatus.Approved,
       })
     )
   }, [dispatch, pagination])
@@ -49,7 +49,7 @@ const Store = () => {
       fetchStoresAsyncThunk({
         pageIndex: (pagination?.pageIndex ?? 1) - 1,
         pageSize: pagination?.pageSize,
-        approveStatus: StoreApproveStatus.Pending,
+        approveStatus: StoreApproveStatus.Approved,
       })
     )
   }, [dispatch, pagination])
@@ -66,12 +66,13 @@ const Store = () => {
     if (loadingApprove) {
       return
     }
-    dispatch(fetchStoresAsyncThunk({ approveStatus: StoreApproveStatus.Pending }))
+    dispatch(fetchStoresAsyncThunk({ approveStatus: StoreApproveStatus.Approved }))
+    dispatch(resetApproveSuccess())
   }, [dispatch, loadingApprove])
 
   useEffect(() => {
     if (approveSuccess) {
-      if (approveStatus === StoreApproveStatus.Rejected) {
+      if (approveStatus === StoreApproveStatus.Disabled) {
         onRemovingClose()
         toast({
           title: 'Thông báo',
@@ -79,16 +80,23 @@ const Store = () => {
           status: 'success',
           duration: 5000,
           isClosable: true,
+          onCloseComplete: () => dispatch(resetApproveSuccess()),
         })
         return
       }
     }
-  }, [approveSuccess, approveStatus, onRemovingClose, toast])
+  }, [approveSuccess, approveStatus, currentStore, onRemovingClose, dispatch, toast])
 
   return (
     <Box overflowY={'hidden'}>
       <Flex alignItems="center" justifyContent="center" flexDirection={['column', 'row']} mb={6}>
-        <Box display={'flex'} justifyContent={'center'} alignContent={'center'}>
+        <Box
+          display={'flex'}
+          justifyContent={'center'}
+          alignContent={'center'}
+          textAlign={'center'}
+          position={'relative'}
+        >
           <Text fontSize={['xl', '2xl']} fontWeight="bold">
             DANH SÁCH CỬA HÀNG ĐANG HOẠT ĐỘNG
           </Text>
@@ -101,13 +109,16 @@ const Store = () => {
             variant={'outline'}
             disabled={loading}
             margin={'auto'}
+            position={'absolute'}
+            right={'-33%'}
+            top={'6%'}
           >
             Tải lại thông tin
           </Button>
         </Box>
       </Flex>
       <Box
-        border="2px solid"
+        border="5px solid"
         borderColor="gray.800"
         borderRadius={{ base: 'md' }}
         width={'fit-content'}
@@ -115,26 +126,34 @@ const Store = () => {
         minWidth="1028px"
       >
         <Table variant="striped" bg={'white'} maxWidth="1028px" size={'lg'} margin={'auto'} width={'100%'}>
-          <Thead>
+          <Thead borderBottom={'2px solid'}>
             <Tr>
-              <Th textAlign={'center'} fontSize={'1.5xl'}>
+              <Th textAlign={'center'} fontSize={'1.5xl'} w={'26%'}>
                 CỬA HÀNG
               </Th>
-              <Th textAlign={'center'} fontSize={'1.5xl'}>
+              <Th textAlign={'center'} fontSize={'1.5xl'} w={'28%'}>
                 BRAND
               </Th>
-              <Th textAlign={'center'} fontSize={'1.5xl'}>
+              <Th textAlign={'center'} fontSize={'1.5xl'} w={'20%'}>
                 ĐỊA CHỈ
               </Th>
-              <Th textAlign={'center'} fontSize={'1.5xl'}>
-                ACTION REMOVE
+              <Th textAlign={'center'} fontSize={'1.5xl'} w={'26%'}>
+                DỪNG HOẠT ĐỘNG
               </Th>
             </Tr>
           </Thead>
           <Tbody>
             {loading ? (
-              <Flex width="100%" margin="auto" justifyContent={'center'} height="100%">
-                <Spinner />
+              <Flex
+                width="100%"
+                mx="auto"
+                display={'flex'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                height="100%"
+                p={12}
+              >
+                <Spinner marginRight={-750} />
               </Flex>
             ) : (
               storeList &&
@@ -157,6 +176,22 @@ const Store = () => {
                 </Tr>
               ))
             )}
+            {!loading && storeList && storeList?.length <= 0 && (
+              <Tr>
+                <Td colSpan={4}>
+                  <Flex
+                    width="100%"
+                    display={'flex'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    height="100%"
+                    p={12}
+                  >
+                    Chưa có yêu cầu nào cần được xử lý
+                  </Flex>
+                </Td>
+              </Tr>
+            )}
           </Tbody>
         </Table>
       </Box>
@@ -171,13 +206,13 @@ const Store = () => {
       >
         <Pagination pagination={pagination} fetchNextPage={fetchNextPage} fetchPrevPage={fetchPrevPage} />
       </Box>
-      {storeList && storeList?.length <= 0 && <Box>Chưa có yêu cầu nào cần được xử lý</Box>}
+
       <RemoveModal
         isOpen={isRemovingOpen}
         isRemoving={false}
         closeModal={onRemovingClose}
         customerStore={currentStore}
-        handleRemove={() => handleRemoveStore({ storeId: currentStore?.id ?? 0, status: StoreApproveStatus.Rejected })}
+        handleRemove={() => handleRemoveStore({ storeId: currentStore?.id ?? 0, status: StoreApproveStatus.Disabled })}
         loading={loadingApprove}
       />
     </Box>

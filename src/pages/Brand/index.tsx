@@ -17,7 +17,7 @@ import Pagination from 'components/Pagination'
 import { Brand, UpdateBrandStatusRequest } from 'entities/brand'
 import { useCallback, useEffect, useState } from 'react'
 import { AiOutlineReload } from 'react-icons/ai'
-import { setUpdateStatus } from 'store/brand/index'
+import { resetUpdateSuccess, setUpdateStatus } from 'store/brand/index'
 import { updateBrandAsyncThunk, fetchBrandsAsyncThunk } from 'store/brand/brandThunk'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { BrandStatus } from 'utils/constants'
@@ -40,6 +40,7 @@ const BrandUpdate = () => {
       fetchBrandsAsyncThunk({
         pageIndex: (pagination?.pageIndex ?? 0) + 1,
         pageSize: pagination?.pageSize,
+        status: BrandStatus.Enabled,
       })
     )
   }, [dispatch, pagination])
@@ -49,6 +50,7 @@ const BrandUpdate = () => {
       fetchBrandsAsyncThunk({
         pageIndex: (pagination?.pageIndex ?? 1) - 1,
         pageSize: pagination?.pageSize,
+        status: BrandStatus.Enabled,
       })
     )
   }, [dispatch, pagination])
@@ -66,6 +68,7 @@ const BrandUpdate = () => {
       return
     }
     dispatch(fetchBrandsAsyncThunk({ status: BrandStatus.Enabled }))
+    dispatch(resetUpdateSuccess())
   }, [dispatch, loadingUpdate])
 
   useEffect(() => {
@@ -78,11 +81,12 @@ const BrandUpdate = () => {
           status: 'success',
           duration: 5000,
           isClosable: true,
+          onCloseComplete: () => dispatch(resetUpdateSuccess()),
         })
         return
       }
     }
-  }, [updateSuccess, updateStatus, onDisablingClose, toast])
+  }, [updateSuccess, updateStatus, currentBrand, onDisablingClose, dispatch, toast])
 
   useEffect(() => {
     if (isDisablingOpen) {
@@ -93,7 +97,13 @@ const BrandUpdate = () => {
   return (
     <Box overflowY={'hidden'}>
       <Flex alignItems="center" justifyContent="center" flexDirection={['column', 'row']} mb={6}>
-        <Box display={'flex'} justifyContent={'center'} alignContent={'center'}>
+        <Box
+          display={'flex'}
+          justifyContent={'center'}
+          alignContent={'center'}
+          textAlign={'center'}
+          position={'relative'}
+        >
           <Text fontSize={['xl', '2xl']} fontWeight="bold">
             DANH SÁCH BRAND ĐANG HOẠT ĐỘNG &nbsp;
           </Text>
@@ -105,40 +115,51 @@ const BrandUpdate = () => {
             variant={'outline'}
             disabled={loading}
             margin={'auto'}
+            position={'absolute'}
+            right={'-33%'}
+            top={'6%'}
           >
             Tải lại thông tin
           </Button>
         </Box>
       </Flex>
       <Box
-        border="2px solid"
+        border="5px solid"
         borderColor="gray.800"
         borderRadius={{ base: 'md' }}
         width={'fit-content'}
         margin={'auto'}
         minWidth="1028px"
       >
-        <Table variant="striped" bg={'white'} maxWidth="1028px" size={'lg'} margin={'auto'} width={'100%'}>
-          <Thead>
+        <Table bg={'white'} maxWidth="1028px" size={'lg'} margin={'auto'} width={'100%'}>
+          <Thead borderBottom={'2px solid'}>
             <Tr>
-              <Th textAlign={'center'} fontSize={'1.5xl'}>
+              <Th textAlign={'center'} fontSize={'1.5xl'} w={'33%'}>
                 TÊN BRAND
               </Th>
-              <Th textAlign={'center'} fontSize={'1.5xl'}>
+              <Th textAlign={'center'} fontSize={'1.5xl'} w={'25%'}>
                 SỐ CỬA HÀNG
               </Th>
-              <Th textAlign={'center'} fontSize={'1.5xl'}>
+              <Th textAlign={'center'} fontSize={'1.5xl'} width={'17%'}>
                 TRẠNG THÁI
               </Th>
-              <Th textAlign={'center'} fontSize={'1.5xl'}>
+              <Th textAlign={'center'} fontSize={'1.5xl'} width={'25%'}>
                 DỪNG HOẠT ĐỘNG
               </Th>
             </Tr>
           </Thead>
           <Tbody>
             {loading ? (
-              <Flex width="100%" margin="auto" justifyContent={'center'} height="100%">
-                <Spinner />
+              <Flex
+                width="100%"
+                mx="auto"
+                display={'flex'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                height="100%"
+                p={12}
+              >
+                <Spinner marginRight={-680} />
               </Flex>
             ) : (
               brandList &&
@@ -146,14 +167,14 @@ const BrandUpdate = () => {
                 <Tr
                   key={brand.id}
                   borderBottom="1px solid grey"
-                  _hover={{ color: 'blue' }}
+                  _hover={{ color: 'blue', backgroundColor: '#b5e2ff' }}
                   onClick={() => {
                     setCurrentBrand(brand)
                     onDetailsOpen()
                   }}
                 >
                   <Td>{brand.name}</Td>
-                  <Td textAlign="right">{brand.storeList.length}</Td>
+                  <Td textAlign="center">{brand.storeList.length}</Td>
                   <Td textAlign={'center'}>{brand?.status === 0 ? 'Active' : 'Not Active'}</Td>
                   <Td textAlign={'center'}>
                     <Button
@@ -169,6 +190,22 @@ const BrandUpdate = () => {
                 </Tr>
               ))
             )}
+            {!loading && brandList && brandList?.length <= 0 && (
+              <Tr>
+                <Td colSpan={4}>
+                  <Flex
+                    width="100%"
+                    display={'flex'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    height="100%"
+                    p={12}
+                  >
+                    Hiện không có Brand nào tồn tại
+                  </Flex>
+                </Td>
+              </Tr>
+            )}
           </Tbody>
         </Table>
       </Box>
@@ -183,7 +220,6 @@ const BrandUpdate = () => {
       >
         <Pagination pagination={pagination} fetchNextPage={fetchNextPage} fetchPrevPage={fetchPrevPage} />
       </Box>
-      {brandList && brandList?.length <= 0 && <Box>Hiện không có Brand nào tồn tại</Box>}
       <UpdateModal
         isOpen={isDetailsOpen}
         closeModal={onDetailsClose}

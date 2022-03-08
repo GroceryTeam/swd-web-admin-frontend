@@ -13,6 +13,7 @@ const Dashboard = lazy(() => import('pages/Dashboard'))
 const StoreApprove = lazy(() => import('pages/StoreApprove'))
 const Brand = lazy(() => import('pages/Brand'))
 const Store = lazy(() => import('pages/Store'))
+const User = lazy(() => import('pages/User'))
 
 ReactDOM.render(
   <ChakraProvider>
@@ -26,6 +27,7 @@ ReactDOM.render(
               </Route>
               <Route element={<PrivateOutlet />}>
                 <Route path="dashboard" element={<Dashboard />} />
+                <Route path="users" element={<User />} />
                 <Route path="brands" element={<Brand />} />
                 <Route path="stores" element={<Store />} />
                 <Route path="store-approve" element={<StoreApprove />} />
