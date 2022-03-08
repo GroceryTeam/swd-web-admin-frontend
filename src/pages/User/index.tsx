@@ -123,7 +123,7 @@ const UserPage = () => {
                   height="100%"
                   p={12}
                 >
-                  <Spinner marginRight={-680} />
+                  <Spinner marginRight={-700} />
                 </Flex>
               ) : !!users && users?.length > 0 ? (
                 users.map((user: User) => (
