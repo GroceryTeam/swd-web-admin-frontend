@@ -1,7 +1,11 @@
 import axiosClient from 'api/apiClient'
+import axios from 'axios'
 import { Brand, BrandRequest, BrandResponse, UpdateBrandStatusRequest } from 'entities/brand'
 
 export const getBrandApi = async ({ userId, searchTerm, status, pageIndex, pageSize }: BrandRequest) => {
+  axios.defaults.params = {
+    status: '',
+  }
   return axiosClient
     .get('/brands', {
       params: {

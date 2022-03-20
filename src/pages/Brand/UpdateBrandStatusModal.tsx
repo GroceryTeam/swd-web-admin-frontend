@@ -30,7 +30,7 @@ const UpdateModal = ({ isOpen, closeModal, handleUpdate, isUpdating = true, load
       <ModalOverlay />
       <ModalContent>
         {isUpdating ? (
-          <ModalHeader>Thông tin của Brand</ModalHeader>
+          <ModalHeader fontSize={'2xl'}>Thông tin của Brand</ModalHeader>
         ) : (
           <ModalHeader>Xác nhận hủy hoạt động brand</ModalHeader>
         )}
@@ -38,13 +38,17 @@ const UpdateModal = ({ isOpen, closeModal, handleUpdate, isUpdating = true, load
         {isUpdating ? (
           <ModalBody>
             <Flex flexDir={'column'} alignItems={'flex-start'} justifyContent={'flex-start'}>
-              <Text my={2} fontWeight={'medium'}>
-                Tên: {brand?.name}
+              <Text mb={2} fontWeight={'medium'}>
+                Tên Thương Hiệu: {brand?.name}
               </Text>
               <Divider />
-              <Text my={2}>Trạng thái : {brand?.status === 0 ? 'Hoạt động' : 'Không hoạt động'}</Text>
+              <Text my={2} fontWeight={'medium'}>
+                Trạng thái : {brand?.status === 0 ? 'Hoạt động' : 'Không hoạt động'}
+              </Text>
               <Divider />
-              <Text my={2}>Chủ sở hữu: </Text>
+              <Text my={2} fontWeight={'medium'}>
+                Chủ sở hữu:{' '}
+              </Text>
               <UnorderedList>
                 {brand?.userList?.map((user) => (
                   <ListItem key={user.id}>
@@ -53,7 +57,9 @@ const UpdateModal = ({ isOpen, closeModal, handleUpdate, isUpdating = true, load
                 ))}
               </UnorderedList>
               <Divider />
-              <Text my={2}>Store list: </Text>
+              <Text my={2} fontWeight={'medium'}>
+                Danh sách cửa hàng:{' '}
+              </Text>
               <UnorderedList>
                 {brand?.storeList?.map((store: any) => (
                   <ListItem key={store.id}>

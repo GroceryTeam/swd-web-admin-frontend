@@ -37,11 +37,11 @@ interface LinkItemProps {
   route: string
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Trang chủ', icon: FiHome, route: '/dashboard' },
-  { name: 'Người dùng', icon: FiTrendingUp, route: '/users' },
-  { name: 'Thương hiệu', icon: FiCompass, route: '/brands' },
-  { name: 'Cửa hàng', icon: FiStar, route: '/stores' },
-  { name: 'Duyệt cửa hàng', icon: FiSettings, route: '/store-approve' },
+  { name: 'Trang Chủ', icon: FiHome, route: '/dashboard' },
+  { name: 'Người Dùng', icon: FiTrendingUp, route: '/users' },
+  { name: 'Thương Hiệu', icon: FiCompass, route: '/brands' },
+  { name: 'Cửa Hàng', icon: FiStar, route: '/stores' },
+  { name: 'Duyệt Cửa Hàng', icon: FiSettings, route: '/store-approve' },
 ]
 
 export default function SidebarWithHeader({ children }: { children: ReactNode }) {

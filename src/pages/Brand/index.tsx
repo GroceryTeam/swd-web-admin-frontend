@@ -2,7 +2,10 @@ import {
   Box,
   Button,
   Flex,
+  FormControl,
+  FormLabel,
   Spinner,
+  Switch,
   Table,
   Tbody,
   Td,
@@ -36,6 +39,8 @@ const BrandUpdate = () => {
   const { isOpen: isDetailsOpen, onOpen: onDetailsOpen, onClose: onDetailsClose } = useDisclosure()
   const { isOpen: isDisablingOpen, onOpen: onDisablingOpen, onClose: onDisablingClose } = useDisclosure()
 
+  const [isChecked, setIsChecked] = useState(false)
+
   const fetchNextPage = useCallback(() => {
     dispatch(
       fetchBrandsAsyncThunk({
@@ -65,6 +70,14 @@ const BrandUpdate = () => {
   )
 
   useEffect(() => {
+    if (isChecked) {
+      dispatch(fetchBrandsAsyncThunk({ status: BrandStatus.Disabled }))
+    } else {
+      dispatch(fetchBrandsAsyncThunk({ status: BrandStatus.Enabled }))
+    }
+  }, [dispatch, isChecked])
+
+  useEffect(() => {
     if (loadingUpdate) {
       return
     }
@@ -78,7 +91,7 @@ const BrandUpdate = () => {
         onDisablingClose()
         toast({
           title: 'Thông báo',
-          description: 'Hủy hoạt động của Brand thành công',
+          description: 'Hủy hoạt động của thương hiệu thành công',
           status: 'success',
           duration: 5000,
           isClosable: true,
@@ -106,11 +119,15 @@ const BrandUpdate = () => {
           position={'relative'}
         >
           <Text fontSize={['xl', '2xl']} fontWeight="bold">
-            DANH SÁCH BRAND ĐANG HOẠT ĐỘNG &nbsp;
+            DANH SÁCH THƯƠNG HIỆU ĐANG HOẠT ĐỘNG &nbsp;
           </Text>
           <Button
             colorScheme={'cyan'}
-            onClick={() => dispatch(fetchBrandsAsyncThunk({ status: BrandStatus.Enabled }))}
+            onClick={() =>
+              setTimeout(() => {
+                dispatch(fetchBrandsAsyncThunk({ status: BrandStatus.Enabled }))
+              }, 500)
+            }
             size="sm"
             rightIcon={<AiOutlineReload />}
             variant={'outline'}
@@ -124,6 +141,21 @@ const BrandUpdate = () => {
           </Button>
         </Box>
       </Flex>
+      <Flex alignItems="center" justifyContent="center" mb={4} ml={12} width="50%">
+        <FormControl display="flex" alignItems="center" ml={20}>
+          <FormLabel htmlFor="email-alerts" mb="0" fontSize={'1.2rem'}>
+            Hiển thị Thương Hiệu không hoạt động
+          </FormLabel>
+          <Switch
+            size={'md'}
+            mt={2}
+            colorScheme={'teal'}
+            isChecked={isChecked}
+            defaultChecked={false}
+            onChange={() => setIsChecked(!isChecked)}
+          />
+        </FormControl>
+      </Flex>
       <Box
         border="5px solid"
         borderColor="gray.800"
@@ -136,7 +168,7 @@ const BrandUpdate = () => {
           <Thead borderBottom={'2px solid'}>
             <Tr>
               <Th textAlign={'center'} fontSize={'1.5xl'} w={'33%'}>
-                TÊN BRAND
+                TÊN THƯƠNG HIỆU
               </Th>
               <Th textAlign={'center'} fontSize={'1.5xl'} w={'25%'}>
                 SỐ CỬA HÀNG
@@ -183,21 +215,25 @@ const BrandUpdate = () => {
                     </Td>
                   ) : (
                     <Td textAlign={'center'}>
-                      Không &nbsp;
-                      <LockIcon color={'red'} />
+                      Không HĐ&nbsp;
+                      <LockIcon color={'red'} mt={-1} />
                     </Td>
                   )}
-                  <Td textAlign={'center'}>
-                    <Button
-                      colorScheme="red"
-                      onClick={() => {
-                        setCurrentBrand(brand)
-                        onDisablingOpen()
-                      }}
-                    >
-                      <CloseIcon boxSize={'0.7rem'} />
-                    </Button>
-                  </Td>
+                  {brand?.status === 0 ? (
+                    <Td textAlign={'center'}>
+                      <Button
+                        colorScheme="red"
+                        onClick={() => {
+                          setCurrentBrand(brand)
+                          onDisablingOpen()
+                        }}
+                      >
+                        <CloseIcon boxSize={'0.7rem'} />
+                      </Button>
+                    </Td>
+                  ) : (
+                    <Td textAlign={'center'}></Td>
+                  )}
                 </Tr>
               ))
             )}
@@ -212,7 +248,7 @@ const BrandUpdate = () => {
                     height="100%"
                     p={12}
                   >
-                    Hiện không có Brand nào tồn tại
+                    Hiện không có thương hiệu nào tồn tại !
                   </Flex>
                 </Td>
               </Tr>

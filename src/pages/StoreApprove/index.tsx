@@ -142,20 +142,20 @@ const StoreApprove = () => {
         <Table variant="simple" bg={'white'} maxWidth="1028px" size={'lg'} margin={'auto'} width={'100%'}>
           <Thead borderBottom={'2px solid'}>
             <Tr>
-              <Th textAlign={'center'} fontSize={'1.5xl'} w={'27%'}>
-                Brand Name
-              </Th>
               <Th textAlign={'center'} fontSize={'1.5xl'} w={'23%'}>
-                Name
+                CỬA HÀNG
+              </Th>
+              <Th textAlign={'center'} fontSize={'1.5xl'} w={'27%'}>
+                TÊN THƯƠNG HIỆU
               </Th>
               <Th textAlign={'center'} fontSize={'1.5xl'} w={'20%'}>
-                Address
+                ĐỊA CHỈ
               </Th>
               <Th textAlign={'center'} fontSize={'1.5xl'} w={'15%'}>
-                Approve
+                DUYỆT
               </Th>
               <Th textAlign={'center'} fontSize={'1.5xl'} w={'15%'}>
-                Reject
+                TỪ CHỐI
               </Th>
             </Tr>
           </Thead>
@@ -176,8 +176,8 @@ const StoreApprove = () => {
               storeList &&
               storeList?.map((store) => (
                 <Tr key={store.id} borderBottom="1px solid grey">
-                  <Td>{store.brandName}</Td>
                   <Td>{store.name}</Td>
+                  <Td>{store.brandName}</Td>
                   <Td>{store.address}</Td>
                   <Td textAlign={'center'}>
                     <Button

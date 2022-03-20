@@ -36,19 +36,25 @@ const RemoveModal = ({
     <Modal isOpen={isOpen} onClose={closeModal} isCentered motionPreset="slideInBottom">
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Xác Nhận Dừng Cửa Hàng</ModalHeader>
+        <ModalHeader fontSize={'2xl'}>Xác Nhận Dừng Cửa Hàng</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Flex flexDir={'column'} alignItems={'flex-start'} justifyContent={'flex-start'}>
-            <Text my={2} fontWeight={'medium'}>
+            <Text mb={2} fontWeight={'medium'}>
               Tên: {customerStore?.name}
             </Text>
             <Divider />
-            <Text my={2}>Địa chỉ: {customerStore?.address}</Text>
+            <Text my={2} fontWeight={'medium'}>
+              Địa Chỉ: {customerStore?.address}
+            </Text>
             <Divider />
-            <Text my={2}>Thương hiệu: {customerStore?.brandName}</Text>
+            <Text my={2} fontWeight={'medium'}>
+              Thương Hiệu: {customerStore?.brandName}
+            </Text>
             <Divider />
-            <Text my={2}>Chủ sở hữu: </Text>
+            <Text my={2} fontWeight={'medium'}>
+              Chủ Sở Hữu:{' '}
+            </Text>
             <UnorderedList>
               {customerStore?.brand?.userList?.map((user) => (
                 <ListItem key={user.id}>

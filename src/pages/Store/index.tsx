@@ -2,7 +2,10 @@ import {
   Box,
   Button,
   Flex,
+  FormControl,
+  FormLabel,
   Spinner,
+  Switch,
   Table,
   Tbody,
   Td,
@@ -23,6 +26,7 @@ import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { StoreApproveStatus } from 'utils/constants'
 import RemoveModal from './RemoveModal'
 import { CloseIcon } from '@chakra-ui/icons'
+import { any } from 'prop-types'
 
 const Store = () => {
   const dispatch = useAppDispatch()
@@ -34,6 +38,8 @@ const Store = () => {
   const [currentStore, setCurrentStore] = useState<CustomerStore | undefined>(undefined)
 
   const { isOpen: isRemovingOpen, onOpen: onRemovingOpen, onClose: onRemovingClose } = useDisclosure()
+
+  const [isChecked, setIsChecked] = useState(false)
 
   const fetchNextPage = useCallback(() => {
     dispatch(
@@ -62,6 +68,14 @@ const Store = () => {
     },
     [dispatch]
   )
+
+  useEffect(() => {
+    if (isChecked) {
+      dispatch(fetchStoresAsyncThunk({ approveStatus: StoreApproveStatus.Disabled }))
+    } else {
+      dispatch(fetchStoresAsyncThunk({ approveStatus: StoreApproveStatus.Approved }))
+    }
+  }, [dispatch, isChecked])
 
   useEffect(() => {
     if (loadingApprove) {
@@ -104,7 +118,11 @@ const Store = () => {
           <Button
             ml={[2, 3, 4]}
             colorScheme={'cyan'}
-            onClick={() => dispatch(fetchStoresAsyncThunk({ approveStatus: StoreApproveStatus.Approved }))}
+            onClick={() =>
+              setTimeout(() => {
+                dispatch(fetchStoresAsyncThunk({ approveStatus: StoreApproveStatus.Approved }))
+              }, 500)
+            }
             size="sm"
             rightIcon={<AiOutlineReload />}
             variant={'outline'}
@@ -117,6 +135,21 @@ const Store = () => {
             Tải lại thông tin
           </Button>
         </Box>
+      </Flex>
+      <Flex alignItems="center" justifyContent="center" mb={4} ml={12} width="50%">
+        <FormControl display="flex" alignItems="center" ml={20}>
+          <FormLabel htmlFor="email-alerts" mb="0" fontSize={'1.2rem'}>
+            Hiển thị Cửa Hàng không hoạt động
+          </FormLabel>
+          <Switch
+            size={'md'}
+            mt={2}
+            colorScheme={'teal'}
+            isChecked={isChecked}
+            defaultChecked={false}
+            onChange={() => setIsChecked(!isChecked)}
+          />
+        </FormControl>
       </Flex>
       <Box
         border="5px solid"
@@ -133,7 +166,7 @@ const Store = () => {
                 CỬA HÀNG
               </Th>
               <Th textAlign={'center'} fontSize={'1.5xl'} w={'28%'}>
-                BRAND
+                THƯƠNG HIỆU
               </Th>
               <Th textAlign={'center'} fontSize={'1.5xl'} w={'20%'}>
                 ĐỊA CHỈ
@@ -163,17 +196,21 @@ const Store = () => {
                   <Td>{store.name}</Td>
                   <Td>{store.brandName}</Td>
                   <Td>{store.address}</Td>
-                  <Td textAlign={'center'}>
-                    <Button
-                      colorScheme="red"
-                      onClick={() => {
-                        setCurrentStore(store)
-                        onRemovingOpen()
-                      }}
-                    >
-                      <CloseIcon boxSize={'0.7rem'} />
-                    </Button>
-                  </Td>
+                  {store.approvedStatus === 0 ? (
+                    <Td textAlign={'center'}>
+                      <Button
+                        colorScheme="red"
+                        onClick={() => {
+                          setCurrentStore(store)
+                          onRemovingOpen()
+                        }}
+                      >
+                        <CloseIcon boxSize={'0.7rem'} />
+                      </Button>
+                    </Td>
+                  ) : (
+                    <Td textAlign={'center'}></Td>
+                  )}
                 </Tr>
               ))
             )}
