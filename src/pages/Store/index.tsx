@@ -26,7 +26,6 @@ import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { StoreApproveStatus } from 'utils/constants'
 import RemoveModal from './RemoveModal'
 import { CloseIcon } from '@chakra-ui/icons'
-import { any } from 'prop-types'
 
 const Store = () => {
   const dispatch = useAppDispatch()
@@ -152,7 +151,7 @@ const Store = () => {
         </FormControl>
       </Flex>
       <Box
-        border="5px solid"
+        border="4px solid"
         borderColor="gray.800"
         borderRadius={{ base: 'md' }}
         width={'fit-content'}

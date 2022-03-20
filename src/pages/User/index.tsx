@@ -113,7 +113,7 @@ const UserPage = () => {
           </FormControl>
         </Box>
         <Box
-          border="5px solid"
+          border="4px solid"
           borderColor="gray.800"
           borderRadius={{ base: 'md' }}
           width={'fit-content'}
