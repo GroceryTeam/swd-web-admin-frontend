@@ -21,5 +21,5 @@ export const PrivateOutlet = () => {
 export const IsUserRedirectOutlet = () => {
   const { isAuthenticated } = useAppSelector((state) => state.auth)
 
-  return !isAuthenticated ? <Outlet /> : <Navigate to="/dashboard" />
+  return !isAuthenticated ? <Outlet /> : <Navigate to="/login" />
 }
