@@ -70,7 +70,7 @@ const Login = () => {
                 />
                 {errors?.password && (
                   <Text fontSize={['xs', 'sm']} fontWeight="light" color="red">
-                    Vui lòng nhập tên tài khoản
+                    Vui lòng nhập mật khẩu
                   </Text>
                 )}
 
