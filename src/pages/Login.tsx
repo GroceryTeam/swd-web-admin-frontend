@@ -28,12 +28,12 @@ const Login = () => {
     <Box>
       <Flex flexDirection={['column']} alignItems={['center']} mx="auto" maxWidth={1200}>
         {/* Logo */}
-        <Image src="/img/login_1.png" width={24} height={24} />
+        <Image src="/Logo.svg" width={24 * 1.5} height={24 * 1.5} />
 
         <Flex flexDirection={['column']} alignItems={['center']}>
           {/* Welcome */}
           <Text fontSize={['2xl', '3xl']} fontWeight="bold" mt={4} mb={12}>
-            Chào đằng ấy!
+            Đăng Nhập System Admin
           </Text>
 
           {/* Login Form */}

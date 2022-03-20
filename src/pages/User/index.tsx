@@ -2,6 +2,7 @@ import { User } from 'entities/user'
 import { useCallback, useEffect, useState } from 'react'
 import {
   Box,
+  Button,
   Flex,
   FormControl,
   FormLabel,
@@ -20,6 +21,7 @@ import { fetchUsers } from 'store/user/userThunk'
 import { setSearchTermAction } from 'store/user'
 import Pagination from 'components/Pagination'
 import { useDebounce } from '@umijs/hooks'
+import { AiOutlineReload } from 'react-icons/ai'
 
 const UserPage = () => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -73,14 +75,37 @@ const UserPage = () => {
           <Text fontSize={['xl', '2xl']} fontWeight="bold" noOfLines={1} textAlign={'center'} mb={6}>
             DANH SÁCH NGƯỜI DÙNG{'\n'}
           </Text>
-          <FormControl noOfLines={2} marginLeft={'9%'} paddingLeft={1}>
+          <Button
+            colorScheme={'cyan'}
+            onClick={() =>
+              dispatch(
+                fetchUsers({
+                  searchTerm: '',
+                  pageIndex: pagination?.pageIndex,
+                  pageSize: pagination?.pageSize,
+                })
+              )
+            }
+            size="sm"
+            rightIcon={<AiOutlineReload />}
+            variant={'outline'}
+            disabled={loading}
+            margin={'auto'}
+            position={'absolute'}
+            right={'24%'}
+            top={'2%'}
+          >
+            Tải lại thông tin
+          </Button>
+          <FormControl noOfLines={2} marginLeft={'9.5%'} paddingLeft={1}>
             <FormLabel htmlFor="email">Tìm kiếm người dùng:</FormLabel>
             <Input
+              background={'white'}
               type="text"
               p={3}
               maxWidth={'400'}
               mb={3}
-              placeholder="Tìm kiếm"
+              placeholder="Nhập tên người dùng"
               onChange={(e) => {
                 setSearchTerm(e.target.value)
               }}
