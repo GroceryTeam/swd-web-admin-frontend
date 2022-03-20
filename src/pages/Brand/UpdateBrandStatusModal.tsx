@@ -30,9 +30,9 @@ const UpdateModal = ({ isOpen, closeModal, handleUpdate, isUpdating = true, load
       <ModalOverlay />
       <ModalContent>
         {isUpdating ? (
-          <ModalHeader fontSize={'2xl'}>Thông tin của Brand</ModalHeader>
+          <ModalHeader fontSize={'2xl'}>Thông tin Thương hiệu</ModalHeader>
         ) : (
-          <ModalHeader>Xác nhận hủy hoạt động brand</ModalHeader>
+          <ModalHeader>Xác nhận hủy hoạt động Thương hiệu</ModalHeader>
         )}
         <ModalCloseButton />
         {isUpdating ? (

@@ -139,7 +139,7 @@ const StoreApprove = () => {
         margin={'auto'}
         minWidth="1028px"
       >
-        <Table variant="simple" bg={'white'} maxWidth="1028px" size={'lg'} margin={'auto'} width={'100%'}>
+        <Table variant="simple" bg={'white'} maxWidth="1028px" size={'md'} margin={'auto'} width={'100%'}>
           <Thead borderBottom={'2px solid'}>
             <Tr>
               <Th textAlign={'center'} fontSize={'1.5xl'} w={'23%'}>

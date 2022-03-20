@@ -164,7 +164,7 @@ const BrandUpdate = () => {
         margin={'auto'}
         minWidth="1028px"
       >
-        <Table bg={'white'} maxWidth="1028px" size={'lg'} margin={'auto'} width={'100%'}>
+        <Table bg={'white'} maxWidth="1028px" size={'md'} margin={'auto'} width={'100%'}>
           <Thead borderBottom={'2px solid'}>
             <Tr>
               <Th textAlign={'center'} fontSize={'1.5xl'} w={'33%'}>
@@ -200,7 +200,7 @@ const BrandUpdate = () => {
                 <Tr
                   key={brand.id}
                   borderBottom="1px solid grey"
-                  _hover={{ color: 'blue', backgroundColor: '#b5e2ff' }}
+                  _hover={{ color: 'blue', backgroundColor: '#b5e2ff', fontSize: '1.05rem' }}
                   onClick={() => {
                     setCurrentBrand(brand)
                     onDetailsOpen()

@@ -97,7 +97,7 @@ const UserPage = () => {
           >
             Tải lại thông tin
           </Button>
-          <FormControl noOfLines={2} marginLeft={'9.5%'} paddingLeft={1}>
+          <FormControl noOfLines={2} marginLeft={'9.5%'} paddingLeft={1} marginTop={-3}>
             <FormLabel htmlFor="email">Tìm kiếm người dùng:</FormLabel>
             <Input
               background={'white'}
