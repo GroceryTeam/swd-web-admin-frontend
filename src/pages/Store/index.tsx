@@ -111,7 +111,7 @@ const Store = () => {
           textAlign={'center'}
           position={'relative'}
         >
-          <Text fontSize={['xl', '2xl']} fontWeight="bold">
+          <Text fontSize={['2xl', '3xl']} fontWeight="semibold">
             DANH SÁCH CỬA HÀNG ĐANG HOẠT ĐỘNG
           </Text>
           <Button
@@ -119,7 +119,8 @@ const Store = () => {
             colorScheme={'cyan'}
             onClick={() =>
               setTimeout(() => {
-                dispatch(fetchStoresAsyncThunk({ approveStatus: StoreApproveStatus.Approved }))
+                if (isChecked === false) dispatch(fetchStoresAsyncThunk({ approveStatus: StoreApproveStatus.Approved }))
+                else dispatch(fetchStoresAsyncThunk({ approveStatus: StoreApproveStatus.Disabled }))
               }, 500)
             }
             size="sm"
@@ -128,8 +129,8 @@ const Store = () => {
             disabled={loading}
             margin={'auto'}
             position={'absolute'}
-            right={'-33%'}
-            top={'6%'}
+            right={'-28%'}
+            top={'18%'}
           >
             Tải lại thông tin
           </Button>
@@ -151,23 +152,24 @@ const Store = () => {
         </FormControl>
       </Flex>
       <Box
-        border="4px solid"
-        borderColor="gray.800"
+        border="2px solid"
+        borderColor="gray.300"
         borderRadius={{ base: 'md' }}
         width={'fit-content'}
         margin={'auto'}
+        overflow="hidden"
         minWidth="1028px"
       >
         <Table bg={'white'} maxWidth="1028px" size={'md'} margin={'auto'} width={'100%'}>
-          <Thead borderBottom={'2px solid'}>
+          <Thead borderBottom={'2px solid gray.300'}>
             <Tr>
-              <Th textAlign={'center'} fontSize={'1.5xl'} w={'26%'}>
+              <Th fontSize={'1.5xl'} w={'26%'}>
                 CỬA HÀNG
               </Th>
-              <Th textAlign={'center'} fontSize={'1.5xl'} w={'28%'}>
+              <Th fontSize={'1.5xl'} w={'28%'}>
                 THƯƠNG HIỆU
               </Th>
-              <Th textAlign={'center'} fontSize={'1.5xl'} w={'20%'}>
+              <Th fontSize={'1.5xl'} w={'20%'}>
                 ĐỊA CHỈ
               </Th>
               <Th textAlign={'center'} fontSize={'1.5xl'} w={'26%'}>
@@ -204,7 +206,7 @@ const Store = () => {
                           onRemovingOpen()
                         }}
                       >
-                        <CloseIcon boxSize={'0.7rem'} />
+                        <CloseIcon boxSize={'0.6rem'} />
                       </Button>
                     </Td>
                   ) : (

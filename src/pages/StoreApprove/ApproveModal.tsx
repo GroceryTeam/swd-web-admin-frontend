@@ -44,11 +44,17 @@ const ApproveModal = ({
               Tên: {customerStore?.name}
             </Text>
             <Divider />
-            <Text my={2}>Địa chỉ: {customerStore?.address}</Text>
+            <Text my={2} fontWeight={'medium'}>
+              Địa chỉ: {customerStore?.address}
+            </Text>
             <Divider />
-            <Text my={2}>Thương hiệu: {customerStore?.brandName}</Text>
+            <Text my={2} fontWeight={'medium'}>
+              Thương hiệu: {customerStore?.brandName}
+            </Text>
             <Divider />
-            <Text my={2}>Chủ sỡ hữu: </Text>
+            <Text my={2} fontWeight={'medium'}>
+              Chủ sở hữu:{' '}
+            </Text>
             <UnorderedList>
               {customerStore?.brand?.userList?.map((user) => (
                 <ListItem key={user.id}>

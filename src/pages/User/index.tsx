@@ -7,6 +7,8 @@ import {
   FormControl,
   FormLabel,
   Input,
+  InputGroup,
+  InputLeftElement,
   Spinner,
   Table,
   Tbody,
@@ -22,6 +24,7 @@ import { setSearchTermAction } from 'store/user'
 import Pagination from 'components/Pagination'
 import { useDebounce } from '@umijs/hooks'
 import { AiOutlineReload } from 'react-icons/ai'
+import { SearchIcon } from '@chakra-ui/icons'
 
 const UserPage = () => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -72,7 +75,7 @@ const UserPage = () => {
     <Box overflowY={'hidden'}>
       <Flex alignItems="center" justifyContent="center" flexDirection={['column']}>
         <Box display={'flex'} alignItems={'center'} position={'relative'} noOfLines={[1, 2]} width={'100%'}>
-          <Text fontSize={['xl', '2xl']} fontWeight="bold" noOfLines={1} textAlign={'center'} mb={6}>
+          <Text fontSize={['2xl', '3xl']} fontWeight="semibold" noOfLines={1} textAlign={'center'} mb={6}>
             DANH SÁCH NGƯỜI DÙNG{'\n'}
           </Text>
           <Button
@@ -92,47 +95,55 @@ const UserPage = () => {
             disabled={loading}
             margin={'auto'}
             position={'absolute'}
-            right={'24%'}
-            top={'2%'}
+            right={'22%'}
+            top={'5%'}
           >
             Tải lại thông tin
           </Button>
           <FormControl noOfLines={2} marginLeft={'9.5%'} paddingLeft={1} marginTop={-3}>
-            <FormLabel htmlFor="email">Tìm kiếm người dùng:</FormLabel>
-            <Input
-              background={'white'}
-              type="text"
-              p={3}
-              maxWidth={'400'}
-              mb={3}
-              placeholder="Nhập tên người dùng"
-              onChange={(e) => {
-                setSearchTerm(e.target.value)
-              }}
-            />
+            <FormLabel htmlFor="email" fontSize={'1.1rem'}>
+              Tìm kiếm người dùng:
+            </FormLabel>
+            <InputGroup>
+              <InputLeftElement pointerEvents="none" children={<SearchIcon />} />
+              <Input
+                background={'white'}
+                type="text"
+                p={3}
+                pl={10}
+                maxWidth={'400'}
+                mb={3}
+                placeholder="Nhập tên người dùng"
+                onChange={(e) => {
+                  setSearchTerm(e.target.value)
+                }}
+                maxLength={50}
+              />
+            </InputGroup>
           </FormControl>
         </Box>
         <Box
-          border="4px solid"
-          borderColor="gray.800"
+          border="2px solid"
+          borderColor="gray.300"
           borderRadius={{ base: 'md' }}
           width={'fit-content'}
           margin={'auto'}
+          overflow="hidden"
           minWidth="1028px"
         >
           <Table bg={'white'} maxWidth="1028px" size={'lg'} margin={'auto'} width={'100%'}>
-            <Thead borderBottom={'2px solid'}>
+            <Thead borderBottom={'2px solid gray.300'}>
               <Tr>
-                <Th textAlign={'center'} fontSize={'1.5xl'} w={'30%'}>
-                  Tên
+                <Th fontSize={'1.5xl'} w={'28%'}>
+                  Họ Tên
                 </Th>
-                <Th textAlign={'center'} fontSize={'1.5xl'} w={'25%'}>
+                <Th fontSize={'1.5xl'} w={'32%'}>
                   Email
                 </Th>
-                <Th textAlign={'center'} fontSize={'1.5xl'} width={'20%'}>
-                  Số điện thoại
+                <Th fontSize={'1.5xl'} width={'20%'}>
+                  Số ĐT
                 </Th>
-                <Th textAlign={'center'} fontSize={'1.5xl'} width={'25%'}>
+                <Th fontSize={'1.5xl'} width={'20%'}>
                   Username
                 </Th>
               </Tr>
@@ -154,8 +165,8 @@ const UserPage = () => {
                 users.map((user: User) => (
                   <Tr
                     key={user.id}
-                    borderBottom="1px solid grey"
-                    _hover={{ color: 'blue', backgroundColor: '#b5e2ff' }}
+                    borderTop="1px solid grey"
+                    _hover={{ color: 'blue', backgroundColor: '#b5e2ff', fontSize: '1.02rem' }}
                   >
                     <Td>{user.name}</Td>
                     <Td>{user.email}</Td>

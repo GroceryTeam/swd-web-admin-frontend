@@ -111,7 +111,7 @@ const StoreApprove = () => {
           textAlign={'center'}
           position={'relative'}
         >
-          <Text fontSize={['xl', '2xl']} fontWeight="bold">
+          <Text fontSize={['2xl', '3xl']} fontWeight="semibold">
             DANH SÁCH CỬA HÀNG CẦN DUYỆT
           </Text>
           <Button
@@ -124,31 +124,32 @@ const StoreApprove = () => {
             disabled={loading}
             margin={'auto'}
             position={'absolute'}
-            right={'-40%'}
-            top={'6%'}
+            right={'-34%'}
+            top={'18%'}
           >
             Tải lại thông tin
           </Button>
         </Box>
       </Flex>
       <Box
-        border="4px solid"
-        borderColor="gray.800"
+        border="2px solid"
+        borderColor="gray.300"
         borderRadius={{ base: 'md' }}
         width={'fit-content'}
         margin={'auto'}
+        overflow="hidden"
         minWidth="1028px"
       >
         <Table variant="simple" bg={'white'} maxWidth="1028px" size={'md'} margin={'auto'} width={'100%'}>
-          <Thead borderBottom={'2px solid'}>
+          <Thead borderBottom={'2px solid gray.300'}>
             <Tr>
-              <Th textAlign={'center'} fontSize={'1.5xl'} w={'23%'}>
+              <Th fontSize={'1.5xl'} w={'23%'}>
                 CỬA HÀNG
               </Th>
-              <Th textAlign={'center'} fontSize={'1.5xl'} w={'27%'}>
+              <Th fontSize={'1.5xl'} w={'27%'}>
                 TÊN THƯƠNG HIỆU
               </Th>
-              <Th textAlign={'center'} fontSize={'1.5xl'} w={'20%'}>
+              <Th fontSize={'1.5xl'} w={'20%'}>
                 ĐỊA CHỈ
               </Th>
               <Th textAlign={'center'} fontSize={'1.5xl'} w={'15%'}>

@@ -1,8 +1,9 @@
-import { Box, Button, Flex, Image, Input, Text } from '@chakra-ui/react'
+import { Box, Button, Flex, Image, Input, Text, useToast } from '@chakra-ui/react'
 import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { login } from 'store/auth/authThunk'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { getToken } from 'utils/helpers'
 
 const Login = () => {
   const {
@@ -14,14 +15,37 @@ const Login = () => {
   const usernameReg = register('username', { required: true })
   const passwordReg = register('password', { required: true })
 
+  const toast = useToast()
+
   const dispatch = useAppDispatch()
   const { loading } = useAppSelector((state) => state.auth)
+
+  const callToast = useCallback(() => {
+    if (getToken() !== null) {
+      toast({
+        title: 'Đăng nhập thành công',
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+      })
+    } else {
+      toast({
+        title: 'Sai tài khoản hoặc mật khẩu',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      })
+    }
+  }, [toast])
 
   const onSubmit = useCallback(
     (values) => {
       dispatch(login(values))
+      setTimeout(() => {
+        callToast()
+      }, 800)
     },
-    [dispatch]
+    [dispatch, callToast]
   )
 
   return (

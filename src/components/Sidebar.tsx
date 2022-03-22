@@ -22,7 +22,9 @@ import {
   MenuItem,
   MenuDivider,
 } from '@chakra-ui/react'
-import { FiHome, FiTrendingUp, FiCompass, FiStar, FiSettings, FiMenu, FiBell, FiChevronDown } from 'react-icons/fi'
+import { FiUser, FiTag, FiCheckSquare, FiMenu, FiBell, FiChevronDown } from 'react-icons/fi'
+import { FaChalkboard } from 'react-icons/fa'
+import { IoStorefrontOutline } from 'react-icons/io5'
 import { IconType } from 'react-icons'
 import { ReactText } from 'react'
 import { useNavigate } from 'react-router'
@@ -37,11 +39,11 @@ interface LinkItemProps {
   route: string
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Trang Chủ', icon: FiHome, route: '/dashboard' },
-  { name: 'Người Dùng', icon: FiTrendingUp, route: '/users' },
-  { name: 'Thương Hiệu', icon: FiCompass, route: '/brands' },
-  { name: 'Cửa Hàng', icon: FiStar, route: '/stores' },
-  { name: 'Duyệt Cửa Hàng', icon: FiSettings, route: '/store-approve' },
+  { name: 'Trang Chủ', icon: FaChalkboard, route: '/dashboard' },
+  { name: 'Người Dùng', icon: FiUser, route: '/users' },
+  { name: 'Thương Hiệu', icon: FiTag, route: '/brands' },
+  { name: 'Cửa Hàng', icon: IoStorefrontOutline, route: '/stores' },
+  { name: 'Duyệt Cửa Hàng', icon: FiCheckSquare, route: '/store-approve' },
 ]
 
 export default function SidebarWithHeader({ children }: { children: ReactNode }) {
@@ -92,7 +94,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon} route={link.route}>
+        <NavItem key={link.name} icon={link.icon} route={link.route} fontSize={'1.05rem'}>
           {link.name}
         </NavItem>
       ))}

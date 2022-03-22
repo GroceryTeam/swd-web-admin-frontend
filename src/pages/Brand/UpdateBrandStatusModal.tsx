@@ -32,13 +32,13 @@ const UpdateModal = ({ isOpen, closeModal, handleUpdate, isUpdating = true, load
         {isUpdating ? (
           <ModalHeader fontSize={'2xl'}>Thông tin Thương hiệu</ModalHeader>
         ) : (
-          <ModalHeader>Xác nhận hủy hoạt động Thương hiệu</ModalHeader>
+          <ModalHeader>Xác nhận dừng hoạt động Thương hiệu</ModalHeader>
         )}
         <ModalCloseButton />
         {isUpdating ? (
           <ModalBody>
             <Flex flexDir={'column'} alignItems={'flex-start'} justifyContent={'flex-start'}>
-              <Text mb={2} fontWeight={'medium'}>
+              <Text mb={2} fontWeight={'medium'} fontSize={'1.05rem'}>
                 Tên Thương Hiệu: {brand?.name}
               </Text>
               <Divider />
@@ -72,11 +72,13 @@ const UpdateModal = ({ isOpen, closeModal, handleUpdate, isUpdating = true, load
         ) : (
           <ModalBody>
             <Flex flexDir={'column'} alignItems={'flex-start'} justifyContent={'flex-start'}>
-              <Text my={2} fontWeight={'medium'}>
-                Tên: {brand?.name}
+              <Text my={2} fontWeight={'medium'} fontSize={'1.05rem'}>
+                Tên Thương Hiệu: {brand?.name}
               </Text>
               <Divider />
-              <Text my={2}>Trạng thái : {brand?.status === 0 ? 'Hoạt động' : 'Không hoạt động'}</Text>
+              <Text my={2} fontWeight={'medium'}>
+                Trạng Thái : {brand?.status === 0 ? 'Hoạt động' : 'Không hoạt động'}
+              </Text>
               <Divider />
             </Flex>
           </ModalBody>

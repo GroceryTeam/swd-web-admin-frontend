@@ -118,14 +118,15 @@ const BrandUpdate = () => {
           textAlign={'center'}
           position={'relative'}
         >
-          <Text fontSize={['xl', '2xl']} fontWeight="bold">
+          <Text fontSize={['2xl', '3xl']} fontWeight="semibold">
             DANH SÁCH THƯƠNG HIỆU ĐANG HOẠT ĐỘNG &nbsp;
           </Text>
           <Button
             colorScheme={'cyan'}
             onClick={() =>
               setTimeout(() => {
-                dispatch(fetchBrandsAsyncThunk({ status: BrandStatus.Enabled }))
+                if (isChecked === false) dispatch(fetchBrandsAsyncThunk({ status: BrandStatus.Enabled }))
+                else dispatch(fetchBrandsAsyncThunk({ status: BrandStatus.Disabled }))
               }, 500)
             }
             size="sm"
@@ -134,8 +135,8 @@ const BrandUpdate = () => {
             disabled={loading}
             margin={'auto'}
             position={'absolute'}
-            right={'-33%'}
-            top={'6%'}
+            right={'-22%'}
+            top={'17%'}
           >
             Tải lại thông tin
           </Button>
@@ -157,17 +158,18 @@ const BrandUpdate = () => {
         </FormControl>
       </Flex>
       <Box
-        border="4px solid"
-        borderColor="gray.800"
+        border="2px solid"
+        borderColor="gray.300"
         borderRadius={{ base: 'md' }}
         width={'fit-content'}
         margin={'auto'}
+        overflow="hidden"
         minWidth="1028px"
       >
         <Table bg={'white'} maxWidth="1028px" size={'md'} margin={'auto'} width={'100%'}>
-          <Thead borderBottom={'2px solid'}>
+          <Thead borderBottom={'2px solid gray.300'}>
             <Tr>
-              <Th textAlign={'center'} fontSize={'1.5xl'} w={'33%'}>
+              <Th fontSize={'1.5xl'} w={'33%'}>
                 TÊN THƯƠNG HIỆU
               </Th>
               <Th textAlign={'center'} fontSize={'1.5xl'} w={'25%'}>
@@ -228,7 +230,7 @@ const BrandUpdate = () => {
                           onDisablingOpen()
                         }}
                       >
-                        <CloseIcon boxSize={'0.7rem'} />
+                        <CloseIcon boxSize={'0.6rem'} />
                       </Button>
                     </Td>
                   ) : (
