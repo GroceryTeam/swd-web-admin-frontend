@@ -7,7 +7,9 @@ import history from 'utils/history'
 export const login = createAsyncThunk('auth/login', async (payload: LoginProps) => {
   const response = await loginApi(payload)
   setToken(response)
-  history.push('/dashboard')
+  setTimeout(() => {
+    history.push('/dashboard')
+  }, 200)
   return response
 })
 
