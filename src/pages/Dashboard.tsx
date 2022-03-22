@@ -10,11 +10,13 @@ import { fetchBrandsAsyncThunk } from 'store/brand/brandThunk'
 import { fetchStoresAsyncThunk } from 'store/customerStores/storeThunk'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { BrandStatus, StoreApproveStatus } from 'utils/constants'
+import { useNavigate } from 'react-router'
 
 const Dashboard = () => {
   const dispatch = useAppDispatch()
   const { brandList } = useAppSelector((state) => state.brand)
   const { storeList } = useAppSelector((state) => state.store)
+  const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(fetchBrandsAsyncThunk({ status: BrandStatus.Enabled, pageIndex: 1, pageSize: 999 }))
@@ -43,6 +45,8 @@ const Dashboard = () => {
             border={'3px solid'}
             borderColor={'green.200'}
             borderRadius={'lg'}
+            onClick={() => navigate('/brands')}
+            cursor={'pointer'}
           >
             <Box p={6} pl={-3}>
               <Box display="flex" alignItems="baseline" mt={6} pt={-6}>
@@ -78,6 +82,8 @@ const Dashboard = () => {
             border={'3px solid'}
             borderColor={'blue.300'}
             borderRadius={'lg'}
+            onClick={() => navigate('/stores')}
+            cursor={'pointer'}
           >
             <Box display="flex" alignItems="baseline" mt={6}>
               <Badge
@@ -111,6 +117,8 @@ const Dashboard = () => {
             border={'3px solid'}
             borderColor={'red.500'}
             borderRadius={'lg'}
+            onClick={() => navigate('/store-approve')}
+            cursor={'pointer'}
           >
             <Box display="flex" alignItems="baseline" mt={6}>
               <Badge
